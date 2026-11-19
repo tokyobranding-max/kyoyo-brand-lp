@@ -98,34 +98,53 @@
     pinned.forEach(function (w) { list.appendChild(el('p', { style: 'margin: 0; padding: 12px 16px; border: 1px solid #5E554A; border-radius: 8px; font-size: 15px; text-align: left;' }, 'No.' + w[0] + '　' + w[1])); });
     $('sharePinned').onclick = function () { openShare(W.map(function (w, i) { return state.pins[w[0]] ? i : -1; }).filter(function (i) { return i >= 0; })); };
   }
-  // ---- quote images
-  var LP = 'https://tokyobranding.org/kyoyo-brand-lp/', shareIdx = [], shareCv = [];
+  // ---- quote images: made on the spot, attached when sharing
+  var LP = 'https://tokyobranding.org/kyoyo-brand-lp/', shareIdx = [], shareCv = [], shareBlobs = [];
+  if (window.KYBQuote) KYBQuote.setCover('assets/front.jpg');
+  var touch = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  function qUrl(i) { return LP + 'q/' + String(i + 1).padStart(2, '0') + '/'; }
   function shareText(idxs) {
-    if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P\n#教養としてのブランド\n' + LP + 'q/' + String(idxs[0] + 1).padStart(2, '0') + '/'; }
-    return '『教養としてのブランド』から、気になった言葉\n' + idxs.map(function (i) { return '・' + KYBQuote.data(i)[0]; }).join('\n').slice(0, 90) + '\n#教養としてのブランド\n' + LP + 'q/' + String(idxs[0] + 1).padStart(2, '0') + '/';
+    if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P\n#教養としてのブランド\n' + qUrl(idxs[0]); }
+    return '『教養としてのブランド』から、気になった言葉\n#教養としてのブランド\n' + qUrl(idxs[0]);
   }
-  function blobs() { return Promise.all(shareCv.map(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); })); }
+  function files() { return shareBlobs.map(function (b, k) { return new File([b], KYBQuote.filename(shareIdx[k]), { type: 'image/png' }); }); }
+  function canFileShare() { try { return touch && !!navigator.share && !!navigator.canShare && navigator.canShare({ files: files() }); } catch (e) { return false; } }
   function openShare(idxs) {
     if (!window.KYBQuote || !idxs.length) return;
-    shareIdx = idxs; $('shareImgs').textContent = ''; $('shareMsg').textContent = '画像をつくっています…'; $('shareModal').hidden = false;
+    shareIdx = idxs; shareBlobs = []; $('shareImgs').textContent = ''; $('shareMsg').textContent = '画像をつくっています…'; $('shareModal').hidden = false;
     $('shareX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(shareText(idxs));
-    $('shareNative').hidden = !(navigator.canShare && navigator.share);
+    $('shareHint').textContent = '';
     Promise.all(idxs.map(function (i) { return KYBQuote.canvas(i); })).then(function (cs) {
-      shareCv = cs; $('shareMsg').textContent = '';
+      shareCv = cs;
       cs.forEach(function (c, k) { $('shareImgs').appendChild(el('img', { src: c.toDataURL('image/png'), alt: KYBQuote.data(idxs[k])[0], style: 'width: 100%; max-width: ' + (idxs.length > 1 ? '300px' : '420px') + '; height: auto; border-radius: 8px; display: block;' })); });
+      return Promise.all(cs.map(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); }));
+    }).then(function (bs) {
+      shareBlobs = bs; $('shareMsg').textContent = '';
+      $('shareHint').textContent = canFileShare() ? '「Xでシェア」を押して、表示された一覧からXを選ぶと、画像が添付された投稿画面が開きます'
+        : '「Xでシェア」を押すと画像がコピーされ、Xの投稿画面が開きます。本文の下で ' + (isMac ? '⌘ + V' : 'Ctrl + V') + ' を押すと画像が添付されます' + (idxs.length > 1 ? '（2枚目以降は「画像を保存」から添付してください）' : '');
     });
   }
+  $('shareX').addEventListener('click', function (e) {
+    if (!shareBlobs.length) { e.preventDefault(); return; }
+    if (canFileShare()) {
+      e.preventDefault();
+      navigator.share({ files: files(), text: shareText(shareIdx) }).catch(function (er) { if (!er || er.name !== 'AbortError') $('shareMsg').textContent = 'シェアできませんでした。画像を保存してから添付してください'; });
+      return;
+    }
+    try {
+      if (navigator.clipboard && window.ClipboardItem) {
+        navigator.clipboard.write([new ClipboardItem({ 'image/png': shareBlobs[0] })]).then(function () {
+          $('shareMsg').textContent = '画像をコピーしました。Xの投稿画面で ' + (isMac ? '⌘ + V' : 'Ctrl + V') + ' を押してください';
+        }, function () { $('shareMsg').textContent = '画像をコピーできませんでした。「画像を保存」から添付してください'; });
+      } else { $('shareMsg').textContent = 'このブラウザでは画像をコピーできません。「画像を保存」から添付してください'; }
+    } catch (er) { $('shareMsg').textContent = '「画像を保存」から添付してください'; }
+  });
   $('shareClose').onclick = function () { $('shareModal').hidden = true; };
   $('shareModal').addEventListener('click', function (e) { if (e.target === $('shareModal')) $('shareModal').hidden = true; });
   $('shareSave').onclick = function () {
-    blobs().then(function (bs) { bs.forEach(function (b, k) { var u = URL.createObjectURL(b), a = document.createElement('a'); a.href = u; a.download = KYBQuote.filename(shareIdx[k]); document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(u); }, 4000); }); $('shareMsg').textContent = '保存しました'; });
-  };
-  $('shareNative').onclick = function () {
-    blobs().then(function (bs) {
-      var files = bs.map(function (b, k) { return new File([b], KYBQuote.filename(shareIdx[k]), { type: 'image/png' }); });
-      if (navigator.canShare && !navigator.canShare({ files: files })) { $('shareMsg').textContent = 'この端末ではシェアできません。画像を保存してください'; return; }
-      return navigator.share({ files: files, text: shareText(shareIdx) });
-    }).catch(function (e) { if (!e || e.name !== 'AbortError') $('shareMsg').textContent = 'シェアできませんでした。画像を保存してください'; });
+    shareBlobs.forEach(function (b, k) { var u = URL.createObjectURL(b), a = document.createElement('a'); a.href = u; a.download = KYBQuote.filename(shareIdx[k]); document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(u); }, 4000); });
+    if (shareBlobs.length) $('shareMsg').textContent = '保存しました';
   };
   window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('shareModal').hidden) $('shareModal').hidden = true; });
 

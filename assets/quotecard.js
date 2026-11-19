@@ -41,12 +41,24 @@
       g.closePath(); g.fill();
     }
   }
+  var coverImg = null, coverUrl = null;
+  function loadCover() {
+    if (!coverUrl) return Promise.resolve(null);
+    if (coverImg) return Promise.resolve(coverImg);
+    return new Promise(function (res) { var im = new Image(); im.onload = function () { coverImg = im; res(im); }; im.onerror = function () { res(null); }; im.src = coverUrl; });
+  }
+  function drawCover(g, x, y, w, h) {
+    if (!coverImg) return;
+    g.save(); g.shadowColor = 'rgba(0,0,0,0.28)'; g.shadowBlur = 24; g.shadowOffsetY = 8;
+    g.fillStyle = '#1c1b19'; g.fillRect(x, y, w, h); g.restore();
+    g.drawImage(coverImg, x, y, w, h);
+  }
   function draw(i) {
     var q = Q[i], c = document.createElement('canvas'); c.width = W; c.height = H;
     var g = c.getContext('2d');
     g.fillStyle = '#F4F4F4'; g.fillRect(0, 0, W, H);
     quoteMark(g, PAD, 96, 74);
-    var top = 270, bottom = 860, size = 84, lines;
+    var top = 250, bottom = 760, size = 84, lines;
     for (; size >= 44; size -= 2) {
       g.font = '700 ' + size + 'px "Noto Sans JP", "Hiragino Sans", sans-serif';
       lines = wrap(g, q[0], W - PAD * 2);
@@ -57,14 +69,16 @@
     g.font = '400 42px "Noto Sans JP", "Hiragino Sans", sans-serif';
     g.fillText(q[1] + '　' + q[2] + 'P', PAD, 940);
     g.fillText('教養としてのブランド', PAD, 1004);
+    drawCover(g, 760, 790, 252, 357);
     return c;
   }
   window.KYBQuote = {
+    setCover: function (u) { coverUrl = u; coverImg = null; },
     count: Q.length,
     data: function (i) { return Q[i]; },
     canvas: function (i) {
       var f = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 60px "Noto Sans JP"'), document.fonts.load('400 40px "Noto Sans JP"')]).catch(function () {}) : Promise.resolve();
-      return f.then(function () { return draw(i); });
+      return f.then(loadCover).then(function () { return draw(i); });
     },
     blob: function (i) { return this.canvas(i).then(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); }); },
     filename: function (i) { return '教養としてのブランド_' + String(i + 1).padStart(2, '0') + '.png'; }
