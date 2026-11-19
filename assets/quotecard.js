@@ -67,6 +67,6 @@
       return f.then(function () { return draw(i); });
     },
     blob: function (i) { return this.canvas(i).then(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); }); },
-    filename: function (i) { return 'kyoyo-brand-quote-' + String(i + 1).padStart(2, '0') + '.png'; }
+    filename: function (i) { return '教養としてのブランド_' + String(i + 1).padStart(2, '0') + '.png'; }
   };
 })();
