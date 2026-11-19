@@ -1,0 +1,159 @@
+(function () {
+  'use strict';
+  var BASE = 'https://note.com/chikaike/n/';
+  var MAG = 'https://note.com/chikaike/m/m676d481d8327';
+  var W = [
+    ['01', 'ブランドとは、世界の美学を読む共通言語であり、毎日の選び方を変える教養である', 'はじめに『共通言語の美学』', 'n9544b664659c', []],
+    ['02', 'ブランドの正体は物ではなく、その奥にある美学。人は物を通してその意味を買っている', '序章『意味の美学』', 'n32b280120c07', ['price']],
+    ['03', 'ブランドは焼き印の約束から始まり、何を選び、何を選ばないかという美学によって意味へと育つ', '第1章『約束の美学』', 'n8b087d4e0d58', []],
+    ['04', '意味ある高さとは、使う年月で値段を割り、直しながら受け継ぐことで、払ったお金が暮らしに返ってくる高さ', '第2章『意味ある高さの美学』', 'nd5afb4f0c21c', ['price']],
+    ['05', '美学は風土と歴史から生まれ、3つの軸で、世界の地図として読み解ける', '第3章『風土と歴史の美学』', 'n1bf907400d2b', ['season']],
+    ['06', 'フランスの「高い」は、見せるための値段ではなく、毎日を美しく生きる時間の値段である', '第4章 フランス『暮らしの美学』', 'n7da49b502388', ['price', 'table']],
+    ['07', 'ドイツの「シンプル」は、手を抜いた形ではなく、引き算を積み重ねて長く使えるようにした形である', '第5章 ドイツ『合理美』', 'ne684fdc16d4e', ['long']],
+    ['08', '日本の美学は、足りないことを恐れず、余白と時間に価値を委ねること', '第6章 日本『余白と引き算の美学』', 'n5721f0747756', ['season']],
+    ['09', '富山のブランドは、売る前に信頼を置き、使い続けてもらう時間の中で選ばれてきた', '特別編 富山『先用後利の美学』', 'n6f7c91b2bdf0', ['long', 'season']],
+    ['10', 'イタリアの美学は、心が動くかどうかで選び、作り手の情熱ごと受け継ぐこと', '第7章 イタリア『情熱と職人の美学』', 'n653e70e6c4e6', ['table']],
+    ['11', 'イギリスの美学は、型を守り続ける誇りと、型を破る勇気を、同じ手に持つこと', '第8章 イギリス『伝統と反骨の美学』', 'n802b932d8252', ['change']],
+    ['12', 'アメリカの美学は、物を通して自分の生き方を表し、挑戦する人の背中を押すこと', '第9章 アメリカ『挑戦と自己表現の美学』', 'nde1a85a70d10', ['work']],
+    ['13', '北欧の美学は、良いデザインをみんなのものにし、毎日の暮らしの中に幸福を見つけること', '第10章 北欧『幸福と民主的デザインの美学』', 'na5a205c654c9', ['table']],
+    ['14', 'スイスの美学は、見えないところまで精度を積み重ね、時間をかけて信頼を育てること', '第11章 スイス『精密と信頼の美学』', 'n46b5f4ececb8', ['long']],
+    ['15', '韓国の美学は、相手の気持ちに寄り添いながら、恐れずに変わり続けること', '第12章 韓国『変化と共感の美学』', 'na7488f42c8c4', ['change']],
+    ['16', '中国の美学は、完成を待たずに動き出し、使う人と一緒に速く磨き続けること', '第13章 中国『速度と実装の美学』', 'nc011d5731c7c', ['change']],
+    ['17', 'インドの美学は、ひとつの正解を押しつけず、違いを受け入れて、相手に合う形へ変わり続けること', '第14章 インド『多様性と適応の美学』', 'n93311ddd00d8', ['change']],
+    ['18', 'スペインの美学は、色と食と人とのつながりで、ありふれた毎日を祝祭に変えること', '第15章 スペイン『色彩と生活文化の美学』', 'n54b8c1610591', ['table']],
+    ['19', 'ブランドの美学は、空間・言葉・組織の判断にまで宿り、内側から揃っていくことで伝わる', '第16章『空間と組織の美学』', 'n6260b6828567', ['work']],
+    ['20', '人もまた美学で選ばれる。肩書きではなく、原体験から生まれた「なぜ」を言葉にすること', '第17章『パーソナルブランドの美学』', 'nd5367a0f3cbb', ['work']],
+    ['21', '機能はすぐにコピーされる。AI時代に最後に残るのは、物語・原体験・美学というコピーできない「なぜ」', '第18章『なぜの美学』', 'n365a9d1bb481', ['work']],
+    ['22', '自分の美学で選ぶとは、使う年月で物を見直し、自分自身が人生のブランド責任者になること', '終章『選ぶ美学』', 'n440d85620507', ['price', 'long']],
+    ['23', '一人ひとりが美学で選ぶことが、長く使われる物とつくり手を守り、持続的な社会をつくる', 'おわりに『持続の美学』', 'n68f338978d0e', []]
+  ];
+  var S = [['all', 'すべて'], ['price', '値段を考える日に'], ['long', '長く使うものを選ぶ日に'], ['table', '食卓を囲む日に'], ['season', '季節を感じる日に'], ['work', '仕事で迷った日に'], ['change', '変わりたい日に']];
+  var CR = [['Fred Cherrygarden', 'CC BY-SA 4.0', '神保町のすずらん通り'], ['lumoplank', 'CC0', '忍野八海'], ['ccfarmer', 'CC BY 3.0', '京都の町家'], ['Nassauer27', 'CC0', 'かつての靴職人の工房'], ['Raita Futo', 'CC BY 2.0', '日本の杉の森'], ['Myrabella', 'CC BY-SA 3.0', 'ヴェルサイユ宮殿の鏡の間'], ['Ladiszlai', 'CC BY-SA 4.0', 'デッサウのバウハウス校舎'], ["Stephane D'Alu", 'CC BY-SA 3.0', '龍安寺の石庭'], ['Isoyan', 'CC BY-SA 3.0', '高岡の金屋町'], ['Petar Milošević', 'CC BY-SA 4.0', 'フィレンツェの大聖堂'], ['Sjenghai', 'CC BY-SA 4.0', 'ロンドンのサヴィル・ロウ'], ['Mike McBey', 'CC BY 2.0', 'ヨセミテのエル・キャピタン'], ['Julian Herzog', 'CC BY 4.0', 'ストックホルムの旧市街'], ['JoachimKohler-HB', 'CC BY-SA 4.0', 'スイスの町シュヴィーツ'], ['Basile Morin', 'CC BY-SA 4.0', 'ソウルの北村'], ['Charlie fong', 'CC BY-SA 4.0', '深センの街'], ['Eskay001', 'CC BY-SA 4.0', 'マヘシュワルの手織り職人'], ['DimiTalen', 'CC0', 'グエル公園のモザイク'], ['C messier', 'CC BY-SA 4.0', 'ミラノのガッレリア'], ['Mizunoumi', 'CC BY-SA 3.0', '葉山の海岸'], ['EverJean', 'CC BY 2.0', '京都の刃物店の包丁'], ['Tom Maisey', 'CC BY 2.0', '雨の京都の通り'], ['Izu navi', 'CC BY 2.0', '石部の棚田']];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var load = function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+  var save = function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  var state = { scene: 'all', pins: load('kyb_pins', {}), read: load('kyb_read', {}), shift: 0 };
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  var PIN_OFF = 'min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer;';
+  var PIN_ON = 'min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #6B4F2A; background: #E2C796; color: #161514; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;';
+  var url = function (w, m) { return BASE + w[3] + '?utm_source=lp&utm_medium=' + m; };
+  var el = function (tag, attrs, text) { var n = document.createElement(tag); for (var k in attrs) { if (k === 'style') n.style.cssText = attrs[k]; else n.setAttribute(k, attrs[k]); } if (text != null) n.textContent = text; return n; };
+
+  function togglePin(no) { state.pins[no] = !state.pins[no]; if (!state.pins[no]) delete state.pins[no]; save('kyb_pins', state.pins); render(); }
+  function markRead(no) { state.read[no] = true; save('kyb_read', state.read); setTimeout(render, 0); }
+
+  function renderToday() {
+    var now = new Date(), start = new Date(now.getFullYear(), 0, 0);
+    var day = Math.floor((now - start) / 86400000);
+    var w = W[(day + state.shift) % W.length];
+    $('todayDate').textContent = (now.getMonth() + 1) + '月' + now.getDate() + '日';
+    $('todayNo').textContent = w[0];
+    $('todayWord').textContent = w[1];
+    var a = $('todayLink'); a.href = url(w, 'today'); a.textContent = w[2] + ' を読む'; a.onclick = function () { markRead(w[0]); };
+    var b = $('todayPin'); b.textContent = state.pins[w[0]] ? '付箋を貼った' : '付箋を貼る'; b.style.cssText = state.pins[w[0]] ? PIN_ON : PIN_OFF; b.onclick = function () { togglePin(w[0]); };
+  }
+  function renderScenes() {
+    var box = $('scenes'); box.textContent = '';
+    S.forEach(function (sc) {
+      var on = state.scene === sc[0];
+      var b = el('button', { type: 'button', 'class': 'chip', 'aria-pressed': on ? 'true' : 'false', style: 'min-height: 44px; padding: 0 18px; border-radius: 999px; font: inherit; font-size: 14px; cursor: pointer; ' + (on ? 'background: #161514; color: #F4EFE7; border: 1px solid #161514;' : 'background: #FFFFFF; color: #141414; border: 1px solid #C9BFAF;') }, sc[1]);
+      b.onclick = function () { state.scene = sc[0]; render(); };
+      box.appendChild(b);
+    });
+  }
+  function renderCards() {
+    var box = $('cards'); box.textContent = '';
+    W.forEach(function (w, i) {
+      if (state.scene !== 'all' && w[4].indexOf(state.scene) < 0) return;
+      var pinned = !!state.pins[w[0]];
+      var card = el('div', { 'class': 'card reveal', style: 'background: #FFFFFF; border: 1px solid ' + (pinned ? '#6B4F2A' : '#D8CFC2') + '; border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 12px; min-height: 200px; box-sizing: border-box; text-align: center;' });
+      var fig = el('div', { 'class': 'wimg', style: 'position: relative; margin: -22px -22px 0; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 11px 11px 0 0; background: #E3DACD;' });
+      fig.appendChild(el('img', { src: 'assets/words/w' + w[0] + '.jpg', alt: CR[i][2], loading: 'lazy', style: 'display: block; width: 100%; height: 100%; object-fit: cover;' }));
+      fig.appendChild(el('span', { style: 'position: absolute; right: 0; bottom: 0; padding: 2px 8px; background: rgba(0,0,0,0.55); color: #FFFFFF; font-size: 10px; line-height: 1.5;' }, 'Photo: ' + CR[i][0] + ' / ' + CR[i][1] + ' / Wikimedia Commons'));
+      card.appendChild(fig);
+      var row = el('div', { style: 'display: flex; justify-content: space-between; align-items: center; gap: 12px;' });
+      row.appendChild(el('span', { style: 'font-size: 13px; letter-spacing: 0.1em; color: #5A5148;' }, 'No.' + w[0] + (state.read[w[0]] ? '　読んだ' : '')));
+      var pb = el('button', { type: 'button', 'aria-pressed': pinned ? 'true' : 'false', style: pinned ? PIN_ON : PIN_OFF }, pinned ? '付箋を貼った' : '付箋を貼る');
+      pb.onclick = function () { togglePin(w[0]); };
+      row.appendChild(pb); card.appendChild(row);
+      card.appendChild(el('p', { style: "margin: 0; font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 600; line-height: 1.65; flex-grow: 1;" }, w[1]));
+      var a = el('a', { href: url(w, 'words'), target: '_blank', rel: 'noopener', style: 'font-size: 13px; padding: 8px 0;' }, w[2]);
+      a.onclick = function () { markRead(w[0]); };
+      card.appendChild(a);
+      box.appendChild(card);
+    });
+  }
+  function renderPins() {
+    var pinned = W.filter(function (w) { return state.pins[w[0]]; });
+    $('pinCount').textContent = pinned.length;
+    $('readCount').textContent = Object.keys(state.read).length;
+    $('pinsBox').hidden = pinned.length === 0; $('noPins').hidden = pinned.length > 0;
+    var list = $('pinList'); list.textContent = '';
+    pinned.forEach(function (w) { list.appendChild(el('p', { style: 'margin: 0; padding: 12px 16px; border: 1px solid #5E554A; border-radius: 8px; font-size: 15px; text-align: left;' }, 'No.' + w[0] + '　' + w[1])); });
+    var text = '気になった言葉\n' + pinned.map(function (w) { return 'No.' + w[0] + ' ' + w[1]; }).join('\n') + '\n#教養としてのブランド';
+    $('shareLink').href = 'https://x.com/intent/post?text=' + encodeURIComponent(text);
+  }
+  function render() { renderToday(); renderScenes(); renderCards(); renderPins(); }
+  $('nextWord').onclick = function () { state.shift++; var b = $('todayBox'); b.className = state.shift % 2 ? 'fadeB' : 'fadeA'; renderToday(); };
+  render();
+
+  // ---- sidebar: smooth scroll + current section
+  var links = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
+  links.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = (a.getAttribute('href') || '').slice(1), t = $(id); if (!t) return;
+      e.preventDefault();
+      var off = window.innerWidth <= 760 ? 56 : 0;
+      window.scrollTo({ top: t.getBoundingClientRect().top + window.pageYOffset - off, behavior: reduce ? 'auto' : 'smooth' });
+      if (history.replaceState) history.replaceState(null, '', '#' + id);
+    });
+  });
+  var setCur = function (id) { links.forEach(function (a) { if (!a.classList.contains('navlink')) return; var on = a.getAttribute('href') === '#' + id; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); };
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) setCur(en.target.id); }); }, { rootMargin: '-35% 0px -60% 0px' });
+    ['top', 'today', 'words', 'read', 'author'].forEach(function (id) { var n = $(id); if (n) io.observe(n); });
+  }
+
+  // ---- 3D book (sample: opening pages)
+  var SAMPLE = 32;
+  var cv = $('book'), book = null, sound = load('kyb_sound', false);
+  var setSoundLabel = function () { var b = $('soundBtn'); b.textContent = sound ? '音：オン' : '音：オフ'; b.setAttribute('aria-pressed', sound ? 'true' : 'false'); };
+  setSoundLabel();
+  function onState(st) {
+    $('bookClosedCtl').hidden = st.open; $('bookOpenCtl').hidden = !st.open;
+    cv.setAttribute('aria-label', st.open ? '開いた本。ページの左側をクリックで次のページ、右側で前のページ' : '『教養としてのブランド』の立体の本。ドラッグで回せます。クリックで本を開きます');
+    var sp = st.spread || 0;
+    $('bookLabel').textContent = sp === 0 ? '試し読み p.1' : (2 * sp + 1 > SAMPLE ? '試し読みはここまで' : '試し読み p.' + (2 * sp) + '–' + Math.min(SAMPLE, 2 * sp + 1));
+  }
+  function initBook() {
+    if (!window.THREE || !window.makeBook3D) return false;
+    try {
+      book = window.makeBook3D(window.THREE, cv, {
+        pages: SAMPLE, totalPages: 215, sheets: ['assets/pages/s00.jpg', 'assets/pages/s01.jpg'], sound: sound,
+        front: 'assets/front.jpg', spine: 'assets/spine.jpg', back: 'assets/back.jpg',
+        endLines: [
+          { text: '試し読みは、ここまでです。', y: 330, size: 30 },
+          { text: '続きは note で、全23章を', y: 420, size: 24, color: '#4A433B' },
+          { text: '期間限定・無料で公開中です。', y: 462, size: 24, color: '#4A433B' },
+          { text: '教養としてのブランド', y: 600, size: 22, color: '#8A7A63' }
+        ],
+        onState: onState
+      });
+      $('bookFallback').hidden = true;
+      return true;
+    } catch (e) { console.warn('book3d', e); return false; }
+  }
+  if (!initBook()) window.addEventListener('load', initBook);
+  $('openBook').onclick = function () { if (book) book.open(); };
+  $('closeBook').onclick = function () { if (book) book.close(); };
+  $('bookNext').onclick = function () { if (book) book.next(); };
+  $('bookPrev').onclick = function () { if (book) book.prev(); };
+  $('bookToc').onclick = function () { if (book) book.go(1); };
+  $('soundBtn').onclick = function () { sound = !sound; save('kyb_sound', sound); setSoundLabel(); if (book) book.setSound(sound); };
+  window.addEventListener('keydown', function (e) {
+    if (!book || $('bookOpenCtl').hidden) return;
+    if (e.key === 'ArrowLeft') book.next(); else if (e.key === 'ArrowRight') book.prev(); else if (e.key === 'Escape') book.close();
+  });
+})();

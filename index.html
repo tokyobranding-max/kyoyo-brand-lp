@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>教養としてのブランド｜チカイケ秀夫</title>
+<meta name="description" content="すべてが高くなる時代に、何を選ぶか。12の国・地域の美学で読み解く、人が「それ」を選ぶ理由。『教養としてのブランド』（チカイケ秀夫）">
+<meta property="og:title" content="教養としてのブランド">
+<meta property="og:description" content="ブランドを知ると、日常の生活が豊かになる。12の国・地域の美学で読み解く一冊。">
+<meta property="og:image" content="assets/front.jpg">
+<link rel="icon" href="assets/front.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&amp;family=Noto+Serif+JP:wght@400;600;700&amp;display=swap">
+<style>
+html{scroll-behavior:smooth}body{margin:0;background:#F4EFE7}
+[hidden]{display:none!important}
+#bookOpenCtl:not([hidden]),#pinsBox:not([hidden]){display:flex}
+a{color:#141414}a:hover{color:#6B4F2A}
+.chip{transition:background .35s ease,color .35s ease,border-color .35s ease,transform .25s ease}
+.chip:hover{border-color:#141414;transform:translateY(-2px)}
+.card{transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease,border-color .35s ease}
+.card:hover{border-color:#141414;transform:translateY(-6px);box-shadow:0 14px 30px rgba(22,21,20,.12)}
+.wimg img{transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.card:hover .wimg img{transform:scale(1.06)}
+.country{transition:color .25s ease,letter-spacing .35s ease}
+.country:hover{color:#E2C796;letter-spacing:.24em}
+.btn{transition:transform .25s ease,box-shadow .25s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(226,199,150,.35)}
+@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-14px) rotate(1deg)}}
+@keyframes draw{from{stroke-dashoffset:1600}to{stroke-dashoffset:0}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes fadeA{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeB{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes reveal{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes glow{0%,100%{opacity:.35}50%{opacity:1}}
+.rise{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.1s}.d2{animation-delay:.3s}.d3{animation-delay:.5s}.d4{animation-delay:.7s}.d5{animation-delay:.9s}
+.float{animation:float 7s ease-in-out infinite}
+.arc{stroke-dasharray:1600;animation:draw 3.2s cubic-bezier(.4,0,.2,1) .4s both}
+.track{display:flex;gap:56px;width:max-content;animation:marquee 90s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.fadeA{animation:fadeA .8s cubic-bezier(.2,.7,.2,1) both}
+.fadeB{animation:fadeB .8s cubic-bezier(.2,.7,.2,1) both}
+.dot{animation:glow 2.4s ease-in-out infinite}
+.countries a{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.countries a:nth-of-type(1){animation-delay:.6s}.countries a:nth-of-type(2){animation-delay:.68s}.countries a:nth-of-type(3){animation-delay:.76s}.countries a:nth-of-type(4){animation-delay:.84s}.countries a:nth-of-type(5){animation-delay:.92s}.countries a:nth-of-type(6){animation-delay:1s}.countries a:nth-of-type(7){animation-delay:1.08s}.countries a:nth-of-type(8){animation-delay:1.16s}.countries a:nth-of-type(9){animation-delay:1.24s}.countries a:nth-of-type(10){animation-delay:1.32s}.countries a:nth-of-type(11){animation-delay:1.4s}.countries a:nth-of-type(12){animation-delay:1.48s}
+@supports (animation-timeline: view()){.reveal{animation:reveal linear both;animation-timeline:view();animation-range:entry 0% cover 28%}}
+.shell{display:flex;align-items:flex-start}
+.side{position:sticky;top:0;height:100vh;width:210px;flex:0 0 210px;box-sizing:border-box;background:#161514;color:#F4EFE7;padding:36px 24px;display:flex;flex-direction:column;gap:32px;z-index:20;border-right:1px solid #2A2622}
+.side .logo{font-family:'Noto Serif JP',serif;font-size:17px;line-height:1.6;letter-spacing:.08em;color:#F4EFE7;text-decoration:none}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.navlink{display:flex;align-items:center;gap:12px;min-height:42px;color:#C9BFAF;text-decoration:none;font-size:14px;letter-spacing:.06em;white-space:nowrap;transition:color .25s ease}
+.navlink::before{content:"";width:14px;height:1px;background:#5E554A;transition:width .35s cubic-bezier(.2,.7,.2,1),background .35s ease}
+.navlink:hover{color:#F4EFE7}.navlink:hover::before{width:22px;background:#8A7A63}
+.navlink.on{color:#E2C796}.navlink.on::before{width:30px;background:#E2C796}
+.side .shelf{margin-top:auto;font-size:13px;color:#8A7A63;text-decoration:none;min-height:40px;display:flex;align-items:center}
+.side .shelf:hover{color:#E2C796}
+.mainc{flex:1 1 auto;min-width:0}
+@media (max-width:760px){.shell{flex-direction:column}.side{height:auto;width:100%;flex:none;padding:6px 16px;flex-direction:row;align-items:center;gap:16px;overflow-x:auto;border-right:0;border-bottom:1px solid #2A2622}.side .logo,.side .shelf{display:none}.side nav{flex-direction:row;gap:18px}.navlink::before{display:none}}
+@media (max-width:760px){h1{font-size:32px!important}h2{font-size:26px!important}#top p{font-size:16px!important}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+
+<div style="background: #F4EFE7; color: #141414; font-family: 'Noto Sans JP', sans-serif; line-height: 1.7;">
+
+<div class="shell">
+<aside class="side">
+<a class="logo" href="#top" data-nav>教養としての<br><span style="color: #E2C796;">ブランド。</span></a>
+<nav aria-label="ページ内">
+<a class="navlink on" href="#top" data-nav>トップ</a>
+<a class="navlink" href="#today" data-nav>今日の一言</a>
+<a class="navlink" href="#words" data-nav>言葉と場面</a>
+<a class="navlink" href="#read" data-nav>読み方を選ぶ</a>
+<a class="navlink" href="#author" data-nav>著者</a>
+</nav>
+<a class="shelf" href="https://note.com/chikaike/m/m676d481d8327" target="_blank" rel="noopener">noteで全23章を読む →</a>
+</aside>
+<div class="mainc">
+
+<section id="top" style="background: #161514; color: #F4EFE7; position: relative; overflow: hidden;">
+<div style="position: relative; max-width: 1120px; margin: 0 auto; padding: 64px 24px 72px; display: flex; flex-direction: column; gap: 40px; align-items: center;">
+<div style="width: 100%; max-width: 820px; display: flex; flex-direction: column; gap: 24px; align-items: center; text-align: center;">
+<p class="rise d1" style="margin: 0; font-size: 14px; letter-spacing: 0.12em; color: #E2C796;">世界で選ばれ続ける会社と人が身につけている</p>
+<h1 class="rise d2" style="margin: 0; font-family: 'Noto Serif JP', serif; font-weight: 600; font-size: 48px; line-height: 1.35;">すべてが高くなる時代に、<br>何を選ぶか。</h1>
+<p class="rise d3" style="margin: 0; font-size: 18px; color: #E8E2D8;">安物買いは銭失い。ブランドを知ると、暮らしに返ってくる「意味ある高さ」が見えてくる。12の国・地域の美学で読み解く、人が「それ」を選ぶ理由。</p>
+<div class="rise d4" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center;">
+<a class="btn" href="https://note.com/chikaike/m/m676d481d8327" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; background: #E2C796; color: #161514; font-weight: 700; text-decoration: none; border-radius: 999px;">noteで無料で読む（期間限定）</a>
+</div>
+<p class="rise d5" style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 20px; color: #F4EFE7;">ブランドを知ると、日常の生活が豊かになる。</p>
+</div>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 14px; align-items: center;">
+<div style="position: relative; width: 100%; max-width: 760px; aspect-ratio: 4 / 3;">
+<img id="bookFallback" src="assets/front.jpg" alt="" style="position: absolute; left: 50%; top: 50%; width: 30%; height: auto; transform: translate(-50%, -50%); box-shadow: 0 18px 40px rgba(0,0,0,0.55); pointer-events: none;">
+<canvas id="book" role="img" aria-label="『教養としてのブランド』の立体の本。ドラッグで回せます。クリックで本を開きます" style="display: block; width: 100%; height: 100%; touch-action: none; cursor: grab;"></canvas>
+</div>
+<div id="bookClosedCtl" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+<button type="button" id="openBook" style="min-height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #E2C796; font: inherit; font-size: 13px; letter-spacing: 0.08em; cursor: pointer;">本を開いて試し読み</button>
+<p style="margin: 0; font-size: 12px; color: #8A7A63;">はじめに〜第1章まで、32ページを試し読みできます</p>
+</div>
+<div id="bookOpenCtl" hidden style="flex-direction: column; align-items: center; gap: 10px;">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px;">
+<button type="button" id="bookNext" aria-label="次のページ" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 13px; cursor: pointer;">← 次へ</button>
+<span id="bookLabel" style="min-width: 120px; text-align: center; font-size: 13px; color: #C9BFAF;">p.1</span>
+<button type="button" id="bookPrev" aria-label="前のページ" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 13px; cursor: pointer;">前へ →</button>
+<button type="button" id="bookToc" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 13px; cursor: pointer;">目次</button>
+<button type="button" id="soundBtn" aria-pressed="false" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 13px; cursor: pointer;">音：オフ</button>
+<button type="button" id="closeBook" style="min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 13px; cursor: pointer; color: #E2C796;">本を閉じる</button>
+</div>
+<p style="margin: 0; font-size: 12px; color: #8A7A63;">ページの端や角をつかんで、右へ引くとめくれます</p>
+<a href="https://note.com/chikaike/m/m676d481d8327" target="_blank" rel="noopener" style="color: #E2C796; font-size: 13px;">続きはnoteで読む →</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="today" style="border-bottom: 1px solid #D8CFC2;">
+<div style="max-width: 1120px; margin: 0 auto; padding: 48px 24px; display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
+<div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.16em; color: #5A5148; display: flex; align-items: center; justify-content: center; gap: 8px;"><span class="dot" aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #B08D5B; display: inline-block;"></span>TODAY</p>
+<p style="margin: 0; font-size: 15px; font-weight: 700;">今日の一言</p>
+<p style="margin: 0; font-size: 13px; color: #5A5148;"><span id="todayDate"></span>　No.<span id="todayNo"></span></p>
+</div>
+<div id="todayBox" class="fadeA" style="width: 100%; max-width: 820px; display: flex; flex-direction: column; gap: 12px; align-items: center;">
+<p style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 600; line-height: 1.55;" id="todayWord"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: center; font-size: 14px;">
+<a id="todayLink" href="#" target="_blank" rel="noopener" style="padding: 10px 0;"></a>
+<button type="button" id="todayPin"></button>
+<button type="button" class="chip" id="nextWord" style="min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #C9BFAF; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer;">次の言葉 →</button>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 32px; align-items: center; text-align: center;">
+<h2 class="reveal" style="margin: 0; font-family: 'Noto Serif JP', serif; font-weight: 600; font-size: 34px; line-height: 1.45;">その「高い」は、本当に高いですか。</h2>
+<div style="width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+<div class="card reveal" style="background: #FBF8F3; border: 1px solid #D8CFC2; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
+<p style="margin: 0; font-size: 14px; color: #5A5148;">A</p>
+<p style="margin: 0; font-size: 22px; font-weight: 700;">3000円の傘を、毎年買う</p>
+<p style="margin: 0; font-size: 15px; color: #4A433B;">安いけれど、毎年なくして、また買う。</p>
+</div>
+<div class="card reveal" style="background: #FBF8F3; border: 1px solid #D8CFC2; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
+<p style="margin: 0; font-size: 14px; color: #5A5148;">B</p>
+<p style="margin: 0; font-size: 22px; font-weight: 700;">3万円の傘を、15年使う</p>
+<p style="margin: 0; font-size: 15px; color: #4A433B;">直しながら使い、雨の日が少し楽しみになる。</p>
+</div>
+</div>
+<p class="reveal" style="margin: 0; font-size: 17px; max-width: 760px;">使う年月で値段を割ると、答えが変わります。この本は、その見方を「教養」として身につけるための一冊です。</p>
+<div style="width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; border-top: 1px solid #D8CFC2; padding-top: 32px;">
+<div class="reveal" style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
+<p style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 600;">ブランドは、約束から始まる</p>
+<p style="margin: 0; font-size: 15px; color: #4A433B;">焼き印の約束が、長い年月をかけて名前に意味を育てる。</p>
+</div>
+<div class="reveal" style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
+<p style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 600;">人は、物の奥の美学を買う</p>
+<p style="margin: 0; font-size: 15px; color: #4A433B;">ブランドの正体は物ではなく、その奥にある美学。</p>
+</div>
+<div class="reveal" style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
+<p style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 600;">美学は、国ごとに違う</p>
+<p style="margin: 0; font-size: 15px; color: #4A433B;">風土と歴史から生まれた12の国・地域の美学を旅する。</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="words" style="background: #FBF8F3; border-top: 1px solid #D8CFC2; border-bottom: 1px solid #D8CFC2;">
+<div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 28px; align-items: center; text-align: center;">
+<div style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
+<h2 class="reveal" style="margin: 0; font-family: 'Noto Serif JP', serif; font-weight: 600; font-size: 34px;">23の言葉から、読む。</h2>
+<p style="margin: 0; font-size: 14px; color: #4A433B;">読んだ章 <span id="readCount">0</span> / 23　・　付箋 <span id="pinCount">0</span></p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+<p style="margin: 0; font-size: 14px; color: #4A433B;">暮らしの場面から選ぶ</p>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+<span id="scenes" style="display: contents;"></span>
+</div>
+</div>
+<div style="width: 100%; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+<span id="cards" style="display: contents;"></span>
+</div>
+</div>
+</section>
+
+<section style="background: #161514; color: #F4EFE7;">
+<div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
+<p style="margin: 0; font-size: 13px; letter-spacing: 0.3em; color: #C9BFAF;">QUESTION</p>
+<h2 class="reveal" style="margin: 0; font-weight: 900; font-size: 40px; line-height: 1.45;">あなたが<span style="color: #E2C796;">気になった言葉</span>は<br>どれ？</h2>
+<div id="pinsBox" hidden style="flex-direction: column; align-items: center; gap: 20px; width: 100%;">
+<div id="pinList" style="display: flex; flex-direction: column; gap: 8px; max-width: 720px; width: 100%;"></div>
+<a class="btn" id="shareLink" href="#" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; background: #E2C796; color: #161514; font-weight: 700; text-decoration: none; border-radius: 999px;">付箋の言葉をXでシェア</a>
+</div>
+<p id="noPins" style="margin: 0; font-size: 16px; color: #C9BFAF;">言葉のカードに付箋を貼ると、ここに集まります。コメントで教えてください。</p>
+
+</div>
+</section>
+
+<section id="read">
+<div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 28px; align-items: center; text-align: center;">
+<h2 class="reveal" style="margin: 0; font-family: 'Noto Serif JP', serif; font-weight: 600; font-size: 34px;">あなたに合う入り口を。</h2>
+<div style="width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+<div class="card reveal" style="background: #161514; color: #F4EFE7; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+<p style="margin: 0; font-size: 13px; color: #E2C796;">いちばんのおすすめ</p>
+<p style="margin: 0; font-size: 22px; font-weight: 700;">noteで無料で読む</p>
+<p style="margin: 0; font-size: 14px; color: #E8E2D8; flex-grow: 1;">全23章を連載中。無料公開は期間限定です。</p>
+<a href="https://note.com/chikaike/m/m676d481d8327" target="_blank" rel="noopener" style="color: #E2C796; font-weight: 700; padding: 10px 0;">マガジンを開く</a>
+</div>
+<div class="card reveal" style="background: #FBF8F3; border: 1px solid #D8CFC2; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+<p style="margin: 0; font-size: 13px; color: #5A5148;">Kindle・紙の本</p>
+<p style="margin: 0; font-size: 22px; font-weight: 700;">本で読む</p>
+<p style="margin: 0; font-size: 14px; color: #4A433B; flex-grow: 1;">[発売日]発売予定。[価格]</p>
+<p style="margin: 0; font-size: 14px; color: #5A5148; padding: 10px 0;">近日公開</p>
+</div>
+<div class="card reveal" style="background: #FBF8F3; border: 1px solid #D8CFC2; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+<img src="assets/cover_en.jpg" alt="英語版『Brand as a Liberal Art』の表紙" style="width: 72px; height: auto;">
+<p style="margin: 0; font-size: 22px; font-weight: 700;">英語版</p>
+<p style="margin: 0; font-size: 14px; color: #4A433B; flex-grow: 1;">Brand as a Liberal Art（EPUB・PDF）</p>
+<a href="https://2583739636444.gumroad.com/l/brand-as-a-liberal-art" target="_blank" rel="noopener" style="font-weight: 700; padding: 10px 0;">Gumroadで見る</a>
+</div>
+<div class="card reveal" style="background: #FBF8F3; border: 1px solid #D8CFC2; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+<p style="margin: 0; font-size: 13px; color: #5A5148;">2027年3月開講</p>
+<p style="margin: 0; font-size: 22px; font-weight: 700;">ブランド開発講座</p>
+<p style="margin: 0; font-size: 14px; color: #4A433B; flex-grow: 1;">この本を教科書に、1年かけて美意識を鍛える全12回の講座。</p>
+<p style="margin: 0; font-size: 14px; color: #5A5148; padding: 10px 0;">[事前登録フォーム]</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="author" style="border-top: 1px solid #D8CFC2;">
+<div style="max-width: 1120px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 24px; align-items: center; text-align: center;">
+<div class="reveal" role="img" aria-label="著者の写真（差し替え予定）" style="width: 160px; height: 160px; border-radius: 50%; background: #E3DACD; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #4A433B; flex: 0 0 auto;">[著者の写真]</div>
+<div style="width: 100%; max-width: 720px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
+<p style="margin: 0; font-size: 14px; color: #4A433B;">『原体験ドリブン』（光文社、2020）著者・社外CBO</p>
+<p style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 600;">チカイケ秀夫</p>
+<p style="margin: 0; font-size: 15px; color: #4A433B;">[著者紹介の本文]</p>
+</div>
+</div>
+</section>
+
+<footer style="background: #161514; color: #F4EFE7;">
+<div style="max-width: 1120px; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
+<p class="reveal" style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 24px;">ブランドを知ると、日常の生活が豊かになる。</p>
+<a class="btn" href="https://note.com/chikaike/m/m676d481d8327" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; background: #E2C796; color: #161514; font-weight: 700; text-decoration: none; border-radius: 999px;">noteで無料で読む（期間限定）</a>
+<p style="margin: 0; font-size: 12px; color: #C9BFAF;">東京ブランディング大学校出版　次巻「ヨーロッパ編」準備中</p>
+</div>
+</footer>
+</div>
+</div>
+
+</div>
+
+<script src="assets/three.min.js"></script>
+<script src="assets/book3d.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
