@@ -15,7 +15,7 @@
 <style>
 html{scroll-behavior:smooth}body{margin:0;background:#F4EFE7}
 [hidden]{display:none!important}
-#bookOpenCtl:not([hidden]),#pinsBox:not([hidden]){display:flex}
+#bookOpenCtl:not([hidden]),#pinsBox:not([hidden]),#shareModal:not([hidden]){display:flex}
 a{color:#141414}a:hover{color:#6B4F2A}
 .chip{transition:background .35s ease,color .35s ease,border-color .35s ease,transform .25s ease}
 .chip:hover{border-color:#141414;transform:translateY(-2px)}
@@ -130,6 +130,7 @@ a{color:#141414}a:hover{color:#6B4F2A}
 <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: center; font-size: 14px;">
 <a id="todayLink" href="#" target="_blank" rel="noopener" style="padding: 10px 0;"></a>
 <button type="button" id="todayPin"></button>
+<button type="button" id="todayShare" style="min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer;">画像でシェア</button>
 <button type="button" class="chip" id="nextWord" style="min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #C9BFAF; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer;">次の言葉 →</button>
 </div>
 </div>
@@ -193,7 +194,7 @@ a{color:#141414}a:hover{color:#6B4F2A}
 <h2 class="reveal" style="margin: 0; font-weight: 900; font-size: 40px; line-height: 1.45;">あなたにとって<span style="color: #E2C796;">ブランド</span>とは？</h2>
 <div id="pinsBox" hidden style="flex-direction: column; align-items: center; gap: 20px; width: 100%;">
 <div id="pinList" style="display: flex; flex-direction: column; gap: 8px; max-width: 720px; width: 100%;"></div>
-<a class="btn" id="shareLink" href="#" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; background: #E2C796; color: #161514; font-weight: 700; text-decoration: none; border-radius: 999px;">付箋の言葉をXでシェア</a>
+<button type="button" class="btn" id="sharePinned" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; background: #E2C796; color: #161514; font: inherit; font-weight: 700; border: 0; border-radius: 999px; cursor: pointer;">付箋の言葉を画像でシェア</button>
 </div>
 <p id="noPins" style="margin: 0; font-size: 16px; color: #C9BFAF;">言葉のカードに付箋を貼ると、ここに集まります。コメントで教えてください。</p>
 
@@ -255,7 +256,22 @@ a{color:#141414}a:hover{color:#6B4F2A}
 
 </div>
 
+<div id="shareModal" role="dialog" aria-modal="true" aria-label="画像でシェア" hidden style="position: fixed; inset: 0; z-index: 1000; background: rgba(14,13,12,0.92); align-items: center; justify-content: center; padding: 24px; box-sizing: border-box;">
+<div style="background: #1E1C1A; color: #F4EFE7; border: 1px solid #3A352F; border-radius: 16px; padding: 24px; width: 100%; max-width: 720px; max-height: 100%; overflow: auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;">
+<p style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 20px;">画像でシェア</p>
+<div id="shareImgs" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: 100%;"></div>
+<p id="shareMsg" style="margin: 0; font-size: 13px; color: #C9BFAF;"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+<button type="button" id="shareSave" style="min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; background: #E2C796; color: #161514; border-color: #E2C796; font-weight: 700;">画像を保存</button>
+<button type="button" id="shareNative" hidden style="min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;">スマホでシェア</button>
+<a id="shareX" href="#" target="_blank" rel="noopener" style="min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;">Xで投稿する</a>
+<button type="button" id="shareClose" style="min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: #F4EFE7; font: inherit; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;">閉じる</button>
+</div>
+<p style="margin: 0; font-size: 12px; color: #8A7A63;">Xでは、保存した画像を投稿画面に添付してください</p>
+</div>
+</div>
 <script src="assets/three.min.js"></script>
+<script src="assets/quotecard.js"></script>
 <script src="assets/book3d.js"></script>
 <script src="assets/app.js"></script>
 </body>

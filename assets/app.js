@@ -52,6 +52,7 @@
     $('todayNo').textContent = w[0];
     $('todayWord').textContent = w[1];
     var a = $('todayLink'); a.href = url(w, 'today'); a.textContent = w[2] + ' を読む'; a.onclick = function () { markRead(w[0]); };
+    $('todayShare').onclick = function () { openShare([W.indexOf(w)]); };
     var b = $('todayPin'); b.textContent = state.pins[w[0]] ? '付箋を貼った' : '付箋を貼る'; b.style.cssText = state.pins[w[0]] ? PIN_ON : PIN_OFF; b.onclick = function () { togglePin(w[0]); };
   }
   function renderScenes() {
@@ -82,6 +83,9 @@
       var a = el('a', { href: url(w, 'words'), target: '_blank', rel: 'noopener', style: 'font-size: 13px; padding: 8px 0;' }, w[2]);
       a.onclick = function () { markRead(w[0]); };
       card.appendChild(a);
+      var sb = el('button', { type: 'button', style: 'align-self: center; ' + PIN_OFF }, '画像でシェア');
+      sb.onclick = function () { openShare([i]); };
+      card.appendChild(sb);
       box.appendChild(card);
     });
   }
@@ -92,9 +96,39 @@
     $('pinsBox').hidden = pinned.length === 0; $('noPins').hidden = pinned.length > 0;
     var list = $('pinList'); list.textContent = '';
     pinned.forEach(function (w) { list.appendChild(el('p', { style: 'margin: 0; padding: 12px 16px; border: 1px solid #5E554A; border-radius: 8px; font-size: 15px; text-align: left;' }, 'No.' + w[0] + '　' + w[1])); });
-    var text = '気になった言葉\n' + pinned.map(function (w) { return 'No.' + w[0] + ' ' + w[1]; }).join('\n') + '\n#教養としてのブランド';
-    $('shareLink').href = 'https://x.com/intent/post?text=' + encodeURIComponent(text);
+    $('sharePinned').onclick = function () { openShare(W.map(function (w, i) { return state.pins[w[0]] ? i : -1; }).filter(function (i) { return i >= 0; })); };
   }
+  // ---- quote images
+  var LP = 'https://tokyobranding.org/kyoyo-brand-lp/', shareIdx = [], shareCv = [];
+  function shareText(idxs) {
+    if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P\n#教養としてのブランド\n' + LP; }
+    return '『教養としてのブランド』から、気になった言葉\n#教養としてのブランド\n' + LP;
+  }
+  function blobs() { return Promise.all(shareCv.map(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); })); }
+  function openShare(idxs) {
+    if (!window.KYBQuote || !idxs.length) return;
+    shareIdx = idxs; $('shareImgs').textContent = ''; $('shareMsg').textContent = '画像をつくっています…'; $('shareModal').hidden = false;
+    $('shareX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(shareText(idxs));
+    $('shareNative').hidden = !(navigator.canShare && navigator.share);
+    Promise.all(idxs.map(function (i) { return KYBQuote.canvas(i); })).then(function (cs) {
+      shareCv = cs; $('shareMsg').textContent = '';
+      cs.forEach(function (c, k) { $('shareImgs').appendChild(el('img', { src: c.toDataURL('image/png'), alt: KYBQuote.data(idxs[k])[0], style: 'width: 100%; max-width: ' + (idxs.length > 1 ? '300px' : '420px') + '; height: auto; border-radius: 8px; display: block;' })); });
+    });
+  }
+  $('shareClose').onclick = function () { $('shareModal').hidden = true; };
+  $('shareModal').addEventListener('click', function (e) { if (e.target === $('shareModal')) $('shareModal').hidden = true; });
+  $('shareSave').onclick = function () {
+    blobs().then(function (bs) { bs.forEach(function (b, k) { var u = URL.createObjectURL(b), a = document.createElement('a'); a.href = u; a.download = KYBQuote.filename(shareIdx[k]); document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(u); }, 4000); }); $('shareMsg').textContent = '保存しました'; });
+  };
+  $('shareNative').onclick = function () {
+    blobs().then(function (bs) {
+      var files = bs.map(function (b, k) { return new File([b], KYBQuote.filename(shareIdx[k]), { type: 'image/png' }); });
+      if (navigator.canShare && !navigator.canShare({ files: files })) { $('shareMsg').textContent = 'この端末ではシェアできません。画像を保存してください'; return; }
+      return navigator.share({ files: files, text: shareText(shareIdx) });
+    }).catch(function (e) { if (!e || e.name !== 'AbortError') $('shareMsg').textContent = 'シェアできませんでした。画像を保存してください'; });
+  };
+  window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('shareModal').hidden) $('shareModal').hidden = true; });
+
   function render() { renderToday(); renderScenes(); renderCards(); renderPins(); }
   $('nextWord').onclick = function () { state.shift++; var b = $('todayBox'); b.className = state.shift % 2 ? 'fadeB' : 'fadeA'; renderToday(); };
   render();
