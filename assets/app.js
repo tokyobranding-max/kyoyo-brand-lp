@@ -101,8 +101,8 @@
   // ---- quote images
   var LP = 'https://tokyobranding.org/kyoyo-brand-lp/', shareIdx = [], shareCv = [];
   function shareText(idxs) {
-    if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P\n#教養としてのブランド\n' + LP; }
-    return '『教養としてのブランド』から、気になった言葉\n#教養としてのブランド\n' + LP;
+    if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P\n#教養としてのブランド\n' + LP + 'q/' + String(idxs[0] + 1).padStart(2, '0') + '/'; }
+    return '『教養としてのブランド』から、気になった言葉\n' + idxs.map(function (i) { return '・' + KYBQuote.data(i)[0]; }).join('\n').slice(0, 90) + '\n#教養としてのブランド\n' + LP + 'q/' + String(idxs[0] + 1).padStart(2, '0') + '/';
   }
   function blobs() { return Promise.all(shareCv.map(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); })); }
   function openShare(idxs) {
