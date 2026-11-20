@@ -41,8 +41,30 @@
   var url = function (w, m) { return BASE + w[3] + '?utm_source=lp&utm_medium=' + m; };
   var el = function (tag, attrs, text) { var n = document.createElement(tag); for (var k in attrs) { if (k === 'style') n.style.cssText = attrs[k]; else n.setAttribute(k, attrs[k]); } if (text != null) n.textContent = text; return n; };
 
-  function togglePin(no) { if (state.pins[no]) delete state.pins[no]; else state.pins[no] = Date.now(); save('kyb_pins', state.pins); render(); }
-  function pinOrder(no) { return typeof state.pins[no] === 'number' ? state.pins[no] : 0; }
+  // ---- colored tabs: one color per purpose
+  var TABS = [
+    { k: 'beauty', label: '美しい', color: '#9CC94B', ph: 'なぜ美しいと思った？', head: 'なぜ美しいと思ったか' },
+    { k: 'curious', label: '気になる', color: '#F2B33D', ph: '何が気になった？', head: '気になったこと' },
+    { k: 'more', label: 'もっと読みたい', color: '#EF6F7E', ph: 'どこをもっと読みたい？', head: 'もっと読みたいところ' },
+    { k: 'reread', label: 'あとで読み返す', color: '#6FC1E0', ph: 'いつ、なぜ読み返したい？', head: '読み返したい理由' }
+  ];
+  var TAB = {}; TABS.forEach(function (t) { TAB[t.k] = t; });
+  function pinOf(no) { var v = state.pins[no]; if (!v) return null; if (typeof v === 'object') return v; return { t: typeof v === 'number' ? v : 0, c: 'beauty' }; }
+  function setPin(no, c) { var cur = pinOf(no); if (cur && cur.c === c) delete state.pins[no]; else state.pins[no] = { t: cur ? cur.t : Date.now(), c: c }; save('kyb_pins', state.pins); render(); }
+  function togglePin(no) { delete state.pins[no]; save('kyb_pins', state.pins); render(); }
+  function pinOrder(no) { var p = pinOf(no); return p ? p.t : 0; }
+  function tabRow(no) {
+    var cur = pinOf(no), row = el('div', { 'class': 'tabs', role: 'group', 'aria-label': '付箋の色を選ぶ' });
+    TABS.forEach(function (t) {
+      var on = !!(cur && cur.c === t.k);
+      var b = el('button', { type: 'button', 'class': 'tab' + (on ? ' on' : ''), 'aria-pressed': on ? 'true' : 'false', title: on ? '付箋をはがす' : t.label + 'の付箋を貼る', style: '--c:' + t.color });
+      b.appendChild(el('span', { 'class': 'tab-flag', 'aria-hidden': 'true' }));
+      b.appendChild(document.createTextNode(t.label));
+      b.onclick = function () { setPin(no, t.k); };
+      row.appendChild(b);
+    });
+    return row;
+  }
   function markRead(no) { state.read[no] = true; save('kyb_read', state.read); setTimeout(render, 0); }
 
   function renderToday() {
@@ -54,7 +76,7 @@
     $('todayWord').textContent = w[1];
     var a = $('todayLink'); a.href = url(w, 'today'); a.textContent = w[2] + ' を読む'; a.onclick = function () { markRead(w[0]); };
     $('todayShare').onclick = function () { openShare([W.indexOf(w)]); };
-    var b = $('todayPin'); b.textContent = state.pins[w[0]] ? '付箋を貼った' : '付箋を貼る'; b.style.cssText = state.pins[w[0]] ? PIN_ON : PIN_OFF; b.onclick = function () { togglePin(w[0]); };
+    var tt = $('todayTabs'); tt.textContent = ''; tt.appendChild(tabRow(w[0]));
   }
   function renderScenes() {
     var box = $('scenes'); box.textContent = '';
@@ -69,21 +91,22 @@
     var box = $('cards'); box.textContent = '';
     W.forEach(function (w, i) {
       if (state.scene !== 'all' && w[4].indexOf(state.scene) < 0) return;
-      var pinned = !!state.pins[w[0]];
-      var card = el('div', { 'class': 'card reveal', style: 'background: #FFFFFF; border: 1px solid ' + (pinned ? '#6B4F2A' : '#D8CFC2') + '; border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 12px; min-height: 200px; box-sizing: border-box; text-align: center;' });
+      var pin = pinOf(w[0]), pinned = !!pin;
+      var card = el('div', { 'class': 'card reveal', style: 'position: relative; background: #FFFFFF; border: 1px solid ' + (pinned ? TAB[pin.c].color : '#D8CFC2') + '; border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 12px; min-height: 200px; box-sizing: border-box; text-align: center;' });
       var fig = el('div', { 'class': 'wimg', style: 'position: relative; margin: -22px -22px 0; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 11px 11px 0 0; background: #E3DACD;' });
       fig.appendChild(el('img', { src: 'assets/words/w' + w[0] + '.jpg', alt: CR[i][2], loading: 'lazy', style: 'display: block; width: 100%; height: 100%; object-fit: cover;' }));
       fig.appendChild(el('span', { style: 'position: absolute; right: 0; bottom: 0; padding: 2px 8px; background: rgba(0,0,0,0.55); color: #FFFFFF; font-size: 10px; line-height: 1.5;' }, 'Photo: ' + CR[i][0] + ' / ' + CR[i][1] + ' / Wikimedia Commons'));
       card.appendChild(fig);
+      if (pinned) card.appendChild(el('span', { 'class': 'card-flag', style: 'background:' + TAB[pin.c].color, title: TAB[pin.c].label }));
       var row = el('div', { style: 'display: flex; justify-content: space-between; align-items: center; gap: 12px;' });
       row.appendChild(el('span', { style: 'font-size: 13px; letter-spacing: 0.1em; color: #5A5148;' }, 'No.' + w[0] + (state.read[w[0]] ? '　読んだ' : '')));
-      var pb = el('button', { type: 'button', 'aria-pressed': pinned ? 'true' : 'false', style: pinned ? PIN_ON : PIN_OFF }, pinned ? '付箋を貼った' : '付箋を貼る');
-      pb.onclick = function () { togglePin(w[0]); };
-      row.appendChild(pb); card.appendChild(row);
+      if (pinned) row.appendChild(el('span', { style: 'font-size: 12px; font-weight: 700; color: #3A332B;' }, '付箋：' + TAB[pin.c].label));
+      card.appendChild(row);
       card.appendChild(el('p', { style: "margin: 0; font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 600; line-height: 1.65; flex-grow: 1;" }, w[1]));
       var a = el('a', { href: url(w, 'words'), target: '_blank', rel: 'noopener', style: 'font-size: 13px; padding: 8px 0;' }, w[2]);
       a.onclick = function () { markRead(w[0]); };
       card.appendChild(a);
+      card.appendChild(tabRow(w[0]));
       var sb = el('button', { type: 'button', style: 'align-self: center; ' + PIN_OFF }, '画像でシェア');
       sb.onclick = function () { openShare([i]); };
       card.appendChild(sb);
@@ -97,10 +120,12 @@
     $('pinsBox').hidden = pinned.length === 0; $('noPins').hidden = pinned.length > 0;
     var list = $('pinList'); list.textContent = '';
     pinned.forEach(function (w) {
-      var box = el('div', { style: 'padding: 12px 16px; border: 1px solid #5E554A; border-radius: 8px; text-align: left;' });
+      var tb = TAB[pinOf(w[0]).c];
+      var box = el('div', { style: 'padding: 12px 16px; border: 1px solid #5E554A; border-left: 6px solid ' + tb.color + '; border-radius: 8px; text-align: left;' });
+      box.appendChild(el('p', { style: 'margin: 0 0 4px; font-size: 12px; font-weight: 700; color: ' + tb.color + ';' }, tb.label));
       box.appendChild(el('p', { style: 'margin: 0; font-size: 15px;' }, 'No.' + w[0] + '　' + w[1]));
       var nt = (state.notes[w[0]] || '').trim();
-      if (nt) box.appendChild(el('p', { style: 'margin: 6px 0 0; font-size: 13px; color: #E2C796;' }, 'なぜ美しいと思ったか：' + nt));
+      if (nt) box.appendChild(el('p', { style: 'margin: 6px 0 0; font-size: 13px; color: #E2C796;' }, tb.head + '：' + nt));
       list.appendChild(box);
     });
     renderSidePins(pinned);
@@ -160,19 +185,30 @@
   function renderSidePins(pinned) {
     $('sidePinCount').textContent = pinned.length;
     $('sidePinEmpty').hidden = pinned.length > 0;
-    var key = pinned.map(function (w) { return w[0]; }).join(',');
+    var ff = $('sideFilter'); ff.textContent = ''; ff.hidden = pinned.length === 0;
+    [{ k: 'all', label: 'すべて', color: '#C9BFAF' }].concat(TABS).forEach(function (t) {
+      var n = t.k === 'all' ? pinned.length : pinned.filter(function (w) { return pinOf(w[0]).c === t.k; }).length;
+      var on = (state.sideFilter || 'all') === t.k;
+      var b = el('button', { type: 'button', 'class': 'sf' + (on ? ' on' : ''), 'aria-pressed': on ? 'true' : 'false', style: '--c:' + t.color }, t.label + ' ' + n);
+      b.onclick = function () { state.sideFilter = t.k; sideKey = null; renderSidePins(pinned); };
+      ff.appendChild(b);
+    });
+    var shown = (state.sideFilter && state.sideFilter !== 'all') ? pinned.filter(function (w) { return pinOf(w[0]).c === state.sideFilter; }) : pinned;
+    var key = (state.sideFilter || 'all') + '|' + pinned.map(function (w) { return w[0] + pinOf(w[0]).c; }).join(',');
     if (key === sideKey) return;
     sideKey = key;
     var box = $('sidePinList'); box.textContent = '';
-    pinned.forEach(function (w) {
-      var card = el('div', { 'class': 'pin' });
+    shown.forEach(function (w) {
+      var tb = TAB[pinOf(w[0]).c];
+      var card = el('div', { 'class': 'pin', style: 'border-left: 5px solid ' + tb.color });
       var m = el('div', { 'class': 'pin-m' });
-      m.appendChild(el('span', null, 'No.' + w[0] + '　' + w[2].replace(/『.*$/, '').trim()));
+      m.appendChild(el('b', { style: 'color:' + tb.color + ';font-weight:700;font-size:12px' }, tb.label));
       var x = el('button', { type: 'button', 'class': 'pin-x', 'aria-label': 'この付箋をはがす' }, 'はがす');
       x.onclick = function () { togglePin(w[0]); };
       m.appendChild(x); card.appendChild(m);
+      card.appendChild(el('p', { style: 'margin:0;font-size:11px;color:#8A7A63' }, 'No.' + w[0] + '　' + w[2].replace(/『.*$/, '').trim()));
       card.appendChild(el('p', { 'class': 'pin-t' }, w[1]));
-      var ta = el('textarea', { placeholder: 'なぜ美しいと思った？', 'aria-label': 'No.' + w[0] + 'を美しいと思った理由' });
+      var ta = el('textarea', { placeholder: tb.ph, 'aria-label': 'No.' + w[0] + '：' + tb.head });
       ta.value = state.notes[w[0]] || '';
       ta.addEventListener('input', function () { state.notes[w[0]] = ta.value; save('kyb_notes', state.notes); });
       ta.addEventListener('blur', function () { sideKey = key; renderPins(); });

@@ -421,6 +421,18 @@ a{color:#141414}a:hover{color:#6B4F2A}
 .pin-x{background:none;border:0;color:#8A7A63;font:inherit;font-size:11px;cursor:pointer;padding:2px 4px}
 .pin-x:hover{color:#E2C796}
 .pins-empty{margin:0;font-size:12px;line-height:1.7;color:#6E655A}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.tab{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 10px 0 6px;border-radius:6px;border:1px solid #D8CFC2;background:#FFFFFF;color:#3A332B;font:inherit;font-size:12px;cursor:pointer;transition:background .2s,border-color .2s}
+.tab-flag{width:8px;height:18px;border-radius:2px;background:var(--c);opacity:.55;transition:opacity .2s,height .2s}
+.tab:hover .tab-flag{opacity:1}
+.tab.on{background:color-mix(in srgb,var(--c) 22%,#fff);border-color:var(--c);font-weight:700}
+.tab.on .tab-flag{opacity:1;height:22px}
+.card-flag{position:absolute;top:-6px;right:22px;width:22px;height:46px;border-radius:2px 2px 3px 3px;box-shadow:0 2px 4px rgba(0,0,0,.18);z-index:2}
+.sfs{display:flex;flex-wrap:wrap;gap:4px}
+.sf{border:1px solid #3A352F;background:transparent;color:#C9BFAF;border-radius:999px;font:inherit;font-size:11px;padding:3px 8px;cursor:pointer}
+.sf.on{border-color:var(--c);color:#161514;background:var(--c)}
+.legend{margin:0;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:10px;color:#C9BFAF}
+.legend span::before{content:"";display:inline-block;width:6px;height:12px;margin-right:4px;vertical-align:-2px;border-radius:1px;background:var(--c)}
 .mainc{flex:1 1 auto;min-width:0}
 @media (max-width:760px){.shell{flex-direction:column}.side{height:auto;width:100%;flex:none;padding:6px 16px;flex-direction:row;align-items:center;gap:16px;overflow-x:auto;border-right:0;border-bottom:1px solid #2A2622}.side .logo,.side .shelf,.side .pins{display:none}.side nav{flex-direction:row;gap:18px}.navlink::before{display:none}}
 @media (max-width:760px){h1{font-size:32px!important}h2{font-size:26px!important}#top p{font-size:16px!important}}
@@ -445,8 +457,10 @@ a{color:#141414}a:hover{color:#6B4F2A}
 </nav>
 <div class="pins" aria-label="わたしの付箋">
 <p class="pins-h">わたしの付箋　<span id="sidePinCount">0</span></p>
-<p class="pins-sub">日常の中で美しいと思った言葉に、付箋を。なぜ美しいと思ったのかを書いておくと、迷ったときに立ち戻れる場所になります。</p>
-<p class="pins-empty" id="sidePinEmpty">言葉のカードの「付箋を貼る」を押すと、ここに集まります。</p>
+<p class="pins-sub">日常の中で美しいと思った言葉に、付箋を。なぜそう思ったのかを書いておくと、迷ったときに立ち戻れる場所になります。</p>
+<p class="legend"><span style="--c:#9CC94B">美しい</span><span style="--c:#F2B33D">気になる</span><span style="--c:#EF6F7E">もっと読みたい</span><span style="--c:#6FC1E0">あとで読み返す</span></p>
+<p class="pins-empty" id="sidePinEmpty">言葉のカードで付箋の色を選ぶと、ここに集まります。</p>
+<div id="sideFilter" class="sfs" hidden></div>
 <div id="sidePinList" style="display: flex; flex-direction: column; gap: 10px;"></div>
 </div>
 <a class="shelf" href="https://note.com/chikaike/m/m676d481d8327" target="_blank" rel="noopener">noteで全23章を読む →</a>
@@ -500,7 +514,7 @@ a{color:#141414}a:hover{color:#6B4F2A}
 <p style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 600; line-height: 1.55;" id="todayWord"></p>
 <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: center; font-size: 14px;">
 <a id="todayLink" href="#" target="_blank" rel="noopener" style="padding: 10px 0;"></a>
-<button type="button" id="todayPin"></button>
+<div id="todayTabs"></div>
 <button type="button" id="todayShare" style="min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #8A7A63; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer;">画像でシェア</button>
 <button type="button" class="chip" id="nextWord" style="min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #C9BFAF; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer;">次の言葉 →</button>
 </div>
