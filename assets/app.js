@@ -128,19 +128,72 @@
     var pinned = W.filter(function (w) { return state.pins[w[0]]; }).sort(function (a, b) { return pinOrder(a[0]) - pinOrder(b[0]); });
     $('pinCount').textContent = pinned.length;
     $('readCount').textContent = Object.keys(state.read).length;
-    $('pinsBox').hidden = pinned.length === 0; $('noPins').hidden = pinned.length > 0;
-    var list = $('pinList'); list.textContent = '';
-    pinned.forEach(function (w) {
-      var tb = TAB[pinOf(w[0]).c];
-      var box = el('div', { style: 'padding: 12px 16px; border: 1px solid #5E554A; border-left: 6px solid ' + tb.color + '; border-radius: 8px; text-align: left;' });
-      box.appendChild(el('p', { style: 'margin: 0 0 4px; font-size: 12px; font-weight: 700; color: ' + tb.color + ';' }, tb.label));
-      box.appendChild(el('p', { style: 'margin: 0; font-size: 15px;' }, 'No.' + w[0] + '　' + w[1]));
-      var nt = (state.notes[w[0]] || '').trim();
-      if (nt) box.appendChild(el('p', { style: 'margin: 6px 0 0; font-size: 13px; color: #E2C796;' }, tb.head + '：' + nt));
-      list.appendChild(box);
-    });
+    $('noPins').hidden = pinned.length > 0; $('sharePinned').hidden = pinned.length === 0; $('sharePinned').style.display = pinned.length ? 'inline-flex' : 'none';
+    renderSummary(pinned);
     renderSidePins(pinned);
     $('sharePinned').onclick = function () { openShare(W.map(function (w, i) { return state.pins[w[0]] ? i : -1; }).filter(function (i) { return i >= 0; })); };
+  }
+  // ---- STEP 05: summary of pinned articles and your own words, shown as quotes
+  function askList() {
+    return Array.prototype.map.call(document.querySelectorAll('#step3 [data-aesth]'), function (ta) {
+      var ask = ta.closest('.ask'); var sm = ask && ask.querySelector('small'), b = ask && ask.querySelector('b');
+      return { k: ta.getAttribute('data-aesth'), small: sm ? sm.textContent : '', q: b ? b.textContent : '' };
+    });
+  }
+  function renderSummary(pinned) {
+    pinned = pinned || W.filter(function (w) { return state.pins[w[0]]; }).sort(function (a, b) { return pinOrder(a[0]) - pinOrder(b[0]); });
+    var a = load('kyb_aesth', {});
+    var sw = $('sumWords'); sw.textContent = ''; var any = false;
+    askList().forEach(function (q) {
+      var v = (a[q.k] || '').trim(); if (!v) return; any = true;
+      var f = el('figure', { style: 'margin: 0;' });
+      f.appendChild(el('figcaption', { style: 'margin: 0 0 6px; font-size: 12px; color: #C9BFAF;' }, q.small.replace(/\s+/g, ' ') + '　' + q.q));
+      f.appendChild(el('blockquote', { 'class': 'sum-q' }, v));
+      sw.appendChild(f);
+    });
+    if (!any) sw.appendChild(el('p', { style: 'margin: 0; font-size: 14px; color: #C9BFAF;' }, 'STEP 04の問いに答えると、ここに引用として並びます。'));
+    $('sumCount').textContent = pinned.length ? pinned.length + '枚' : '';
+    var list = $('pinList'); list.textContent = '';
+    TABS.forEach(function (tb) {
+      var g = pinned.filter(function (w) { return pinOf(w[0]).c === tb.k; }); if (!g.length) return;
+      var grp = el('div', { style: 'display: flex; flex-direction: column; gap: 14px;' });
+      grp.appendChild(el('p', { style: 'margin: 0; font-size: 13px; font-weight: 700; color: ' + tb.color + ';' }, '■ ' + tb.label + '（' + g.length + '）'));
+      g.forEach(function (w) {
+        var f = el('figure', { style: 'margin: 0; padding: 16px 18px; background: #1E1C1A; border: 1px solid #3A352F; border-left: 6px solid ' + tb.color + '; border-radius: 10px;' });
+        f.appendChild(el('blockquote', { 'class': 'sum-q', style: '--c:' + tb.color + '; font-size: 17px;' }, '「' + w[1] + '」'));
+        var cap = el('figcaption', { style: 'margin: 10px 0 0; font-size: 13px; color: #C9BFAF; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center;' });
+        cap.appendChild(document.createTextNode('No.' + w[0]));
+        var lk = el('a', { href: url(w, 'summary'), target: '_blank', rel: 'noopener', style: 'color: #E2C796;' }, w[2] + ' を読む');
+        lk.onclick = function () { markRead(w[0]); };
+        cap.appendChild(lk);
+        if (state.read[w[0]]) cap.appendChild(el('span', { style: 'font-size: 11px; color: #9CC94B;' }, '読んだ'));
+        f.appendChild(cap);
+        var nt = (state.notes[w[0]] || '').trim();
+        if (nt) {
+          var me = el('div', { style: 'margin: 12px 0 0; padding: 10px 12px; background: #262320; border-radius: 8px;' });
+          me.appendChild(el('p', { style: 'margin: 0 0 4px; font-size: 11px; font-weight: 700; color: ' + tb.color + ';' }, tb.head));
+          me.appendChild(el('p', { style: 'margin: 0; font-size: 15px; line-height: 1.8; color: #F4EFE7; white-space: pre-wrap;' }, nt));
+          f.appendChild(me);
+        }
+        grp.appendChild(f);
+      });
+      list.appendChild(grp);
+    });
+  }
+  function summaryText() {
+    var a = load('kyb_aesth', {}), out = ['『教養としてのブランド』わたしのまとめ', ''];
+    var ws = askList().filter(function (q) { return (a[q.k] || '').trim(); });
+    if (ws.length) { out.push('■ わたしの日常の言葉'); ws.forEach(function (q) { out.push('・' + q.q); out.push('　> ' + a[q.k].trim().replace(/\n/g, '\n　> ')); }); out.push(''); }
+    var pinned = W.filter(function (w) { return state.pins[w[0]]; });
+    TABS.forEach(function (tb) {
+      var g = pinned.filter(function (w) { return pinOf(w[0]).c === tb.k; }); if (!g.length) return;
+      out.push('■ ' + tb.label);
+      g.forEach(function (w) { out.push('> 「' + w[1] + '」（' + w[2] + '）'); var nt = (state.notes[w[0]] || '').trim(); if (nt) out.push('　' + tb.head + '：' + nt); });
+      out.push('');
+    });
+    var d = (a.def || '').trim(); if (d) { out.push('■ わたしにとってブランドとは、'); out.push(d); out.push(''); }
+    out.push('#教養としてのブランド'); out.push(LP);
+    return out.join('\n');
   }
   // ---- quote images: made on the spot, attached when sharing
   var LP = 'https://tokyobranding.org/kyoyo-brand-lp/', shareIdx = [], shareCv = [], shareBlobs = [];
@@ -233,12 +286,18 @@
   $('nextWord').onclick = function () { state.shift++; var b = $('todayBox'); b.className = state.shift % 2 ? 'fadeB' : 'fadeA'; renderToday(); };
   render();
 
+  var sumT = null; function sumLater() { clearTimeout(sumT); sumT = setTimeout(function () { renderSummary(); }, 400); }
+  document.addEventListener('input', function (e) { if (e.target && e.target.closest && e.target.closest('.pins')) sumLater(); });
+  $('copySum').onclick = function () {
+    var t = summaryText(), b = $('copySum'), done = function () { b.textContent = 'コピーしました'; setTimeout(function () { b.textContent = 'まとめをテキストでコピー'; }, 1800); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { window.prompt('コピーしてください', t); }); else window.prompt('コピーしてください', t);
+  };
   // ---- STEP 03: put your aesthetic into words (kept in this browser)
   var aesth = load('kyb_aesth', {});
   Array.prototype.forEach.call(document.querySelectorAll('[data-aesth]'), function (ta) {
     var k = ta.getAttribute('data-aesth');
     ta.value = aesth[k] || '';
-    ta.addEventListener('input', function () { aesth[k] = ta.value; save('kyb_aesth', aesth); });
+    ta.addEventListener('input', function () { aesth[k] = ta.value; save('kyb_aesth', aesth); if (k !== 'def') sumLater(); });
   });
 
   // ---- sidebar: smooth scroll + current section

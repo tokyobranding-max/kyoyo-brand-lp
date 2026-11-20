@@ -367,6 +367,10 @@
 <style>
 html{scroll-behavior:smooth}body{margin:0;background:#F4EFE7}
 [hidden]{display:none!important}
+.sum-h{margin:0 0 14px;font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;color:#F4EFE7;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid #3A352F;padding-bottom:10px}
+.sum-q{margin:0;padding:4px 0 4px 18px;border-left:3px solid var(--c,#E2C796);font-family:'Noto Serif JP',serif;font-size:18px;line-height:1.8;color:#F4EFE7;white-space:pre-wrap}
+.sum-def{width:100%;min-height:96px;box-sizing:border-box;padding:14px 16px;border-radius:10px;border:1px solid #5E554A;background:#1E1C1A;color:#F4EFE7;font:inherit;font-family:'Noto Serif JP',serif;font-size:18px;line-height:1.8;resize:vertical}
+.sum-def:focus{outline:2px solid #E2C796;outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 #bookOpenCtl:not([hidden]),#pinsBox:not([hidden]),#shareModal:not([hidden]){display:flex}
 a{color:#141414}a:hover{color:#6B4F2A}
@@ -631,13 +635,27 @@ a{color:#141414}a:hover{color:#6B4F2A}
 <div style="max-width: 1120px; margin: 0 auto; padding: 80px 24px; display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center;">
 <p class="step-k dk">STEP 05<span>意識して生活する</span></p>
 <h2 class="reveal" style="margin: 0; font-weight: 900; font-size: 40px; line-height: 1.45;">あなたにとって<span style="color: #E2C796;">ブランド</span>とは？</h2>
-<div id="pinsBox" hidden style="flex-direction: column; align-items: center; gap: 20px; width: 100%;">
-<div id="pinList" style="display: flex; flex-direction: column; gap: 8px; max-width: 720px; width: 100%;"></div>
-<button type="button" class="btn" id="sharePinned" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; background: #E2C796; color: #161514; font: inherit; font-weight: 700; border: 0; border-radius: 999px; cursor: pointer;">付箋の言葉を画像でシェア</button>
+<p class="reveal" style="margin: 0; font-size: 16px; line-height: 1.9; max-width: 720px; color: #E8E2D8;">気になった記事に貼った付箋と、あなたが自分の日常から言葉にしたことを、ここにまとめました。読み返すたびに、自分の美学に立ち戻れる場所です。</p>
+<div id="sumBox" style="display: flex; flex-direction: column; gap: 36px; width: 100%; max-width: 760px; text-align: left;">
+<div>
+<h3 class="sum-h">わたしの日常の言葉 <a href="#step3" data-nav style="font-size: 12px; font-weight: 400; color: #C9BFAF;">STEP 04で書く →</a></h3>
+<div id="sumWords" style="display: flex; flex-direction: column; gap: 14px;"></div>
 </div>
-<p class="reveal" style="margin: 0; font-size: 16px; line-height: 1.9; max-width: 720px; color: #E8E2D8;">美しいと思ったものを、言葉にしてシェアする。人に伝えるたびに、自分の美学は磨かれ、ほかの人もあなたの美学を知ることになります。</p>
-<p id="noPins" style="margin: 0; font-size: 16px; color: #C9BFAF;">言葉のカードに付箋を貼ると、ここに集まります。コメントで教えてください。</p>
-
+<div>
+<h3 class="sum-h">付箋を貼った記事 <span id="sumCount" style="font-size: 12px; font-weight: 400; color: #C9BFAF;"></span></h3>
+<div id="pinList" style="display: flex; flex-direction: column; gap: 22px;"></div>
+<p id="noPins" style="margin: 0; font-size: 14px; color: #C9BFAF;">STEP 03の言葉のカードに付箋を貼ると、ここに集まります。</p>
+</div>
+<div>
+<h3 class="sum-h">わたしにとってブランドとは、</h3>
+<textarea data-aesth="def" class="sum-def" placeholder="ここまでの付箋と言葉を見返して、一文で書いてみてください" aria-label="わたしにとってブランドとは"></textarea>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+<button type="button" class="btn" id="copySum" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; background: transparent; color: #F4EFE7; font: inherit; font-weight: 700; border: 1px solid #8A7A63; border-radius: 999px; cursor: pointer;">まとめをテキストでコピー</button>
+<button type="button" class="btn" id="sharePinned" hidden style="align-items: center; min-height: 52px; padding: 0 28px; background: #E2C796; color: #161514; font: inherit; font-weight: 700; border: 0; border-radius: 999px; cursor: pointer;">付箋の言葉を画像でシェア</button>
+</div>
+<p style="margin: 0; font-size: 12px; color: #A59D93;">まとめは、このブラウザの中だけに保存されます。</p>
 </div>
 </section>
 
