@@ -401,7 +401,7 @@ a{color:#141414}a:hover{color:#6B4F2A}
 .countries a:nth-of-type(1){animation-delay:.6s}.countries a:nth-of-type(2){animation-delay:.68s}.countries a:nth-of-type(3){animation-delay:.76s}.countries a:nth-of-type(4){animation-delay:.84s}.countries a:nth-of-type(5){animation-delay:.92s}.countries a:nth-of-type(6){animation-delay:1s}.countries a:nth-of-type(7){animation-delay:1.08s}.countries a:nth-of-type(8){animation-delay:1.16s}.countries a:nth-of-type(9){animation-delay:1.24s}.countries a:nth-of-type(10){animation-delay:1.32s}.countries a:nth-of-type(11){animation-delay:1.4s}.countries a:nth-of-type(12){animation-delay:1.48s}
 @supports (animation-timeline: view()){.reveal{animation:reveal linear both;animation-timeline:view();animation-range:entry 0% cover 28%}}
 .shell{display:flex;align-items:flex-start}
-.side{position:sticky;top:0;height:100vh;width:210px;flex:0 0 210px;box-sizing:border-box;background:#161514;color:#F4EFE7;padding:36px 24px;display:flex;flex-direction:column;gap:32px;z-index:20;border-right:1px solid #2A2622}
+.side{position:sticky;top:0;height:100vh;width:250px;flex:0 0 250px;box-sizing:border-box;background:#161514;color:#F4EFE7;padding:36px 24px;display:flex;flex-direction:column;gap:32px;z-index:20;border-right:1px solid #2A2622}
 .side .logo{font-family:'Noto Serif JP',serif;font-size:17px;line-height:1.6;letter-spacing:.08em;color:#F4EFE7;text-decoration:none}
 .side nav{display:flex;flex-direction:column;gap:2px}
 .navlink{display:flex;align-items:center;gap:12px;min-height:42px;color:#C9BFAF;text-decoration:none;font-size:14px;letter-spacing:.06em;white-space:nowrap;transition:color .25s ease}
@@ -410,8 +410,19 @@ a{color:#141414}a:hover{color:#6B4F2A}
 .navlink.on{color:#E2C796}.navlink.on::before{width:30px;background:#E2C796}
 .side .shelf{margin-top:auto;font-size:13px;color:#8A7A63;text-decoration:none;min-height:40px;display:flex;align-items:center}
 .side .shelf:hover{color:#E2C796}
+.pins{flex:1 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px;border-top:1px solid #2A2622;padding-top:18px;margin-right:-8px;padding-right:8px}
+.pins-h{margin:0;font-size:13px;letter-spacing:.12em;color:#E2C796}
+.pins-sub{margin:0;font-size:11px;line-height:1.75;color:#8A7A63}
+.pin{background:#211F1C;border:1px solid #3A352F;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.pin-m{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#C9BFAF}
+.pin-t{margin:0;font-size:12px;line-height:1.65;color:#F4EFE7;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pin textarea{width:100%;box-sizing:border-box;min-height:56px;resize:vertical;background:#161514;color:#F4EFE7;border:1px solid #3A352F;border-radius:6px;font:inherit;font-size:12px;line-height:1.6;padding:6px 8px}
+.pin textarea::placeholder{color:#6E655A}
+.pin-x{background:none;border:0;color:#8A7A63;font:inherit;font-size:11px;cursor:pointer;padding:2px 4px}
+.pin-x:hover{color:#E2C796}
+.pins-empty{margin:0;font-size:12px;line-height:1.7;color:#6E655A}
 .mainc{flex:1 1 auto;min-width:0}
-@media (max-width:760px){.shell{flex-direction:column}.side{height:auto;width:100%;flex:none;padding:6px 16px;flex-direction:row;align-items:center;gap:16px;overflow-x:auto;border-right:0;border-bottom:1px solid #2A2622}.side .logo,.side .shelf{display:none}.side nav{flex-direction:row;gap:18px}.navlink::before{display:none}}
+@media (max-width:760px){.shell{flex-direction:column}.side{height:auto;width:100%;flex:none;padding:6px 16px;flex-direction:row;align-items:center;gap:16px;overflow-x:auto;border-right:0;border-bottom:1px solid #2A2622}.side .logo,.side .shelf,.side .pins{display:none}.side nav{flex-direction:row;gap:18px}.navlink::before{display:none}}
 @media (max-width:760px){h1{font-size:32px!important}h2{font-size:26px!important}#top p{font-size:16px!important}}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
@@ -432,6 +443,12 @@ a{color:#141414}a:hover{color:#6B4F2A}
 <a class="navlink" href="#faq" data-nav>よくある質問</a>
 <a class="navlink" href="#author" data-nav>著者</a>
 </nav>
+<div class="pins" aria-label="わたしの付箋">
+<p class="pins-h">わたしの付箋　<span id="sidePinCount">0</span></p>
+<p class="pins-sub">日常の中で美しいと思った言葉に、付箋を。なぜ美しいと思ったのかを書いておくと、迷ったときに立ち戻れる場所になります。</p>
+<p class="pins-empty" id="sidePinEmpty">言葉のカードの「付箋を貼る」を押すと、ここに集まります。</p>
+<div id="sidePinList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+</div>
 <a class="shelf" href="https://note.com/chikaike/m/m676d481d8327" target="_blank" rel="noopener">noteで全23章を読む →</a>
 </aside>
 <div class="mainc">
