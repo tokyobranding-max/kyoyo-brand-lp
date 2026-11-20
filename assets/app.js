@@ -46,7 +46,8 @@
     { k: 'beauty', label: '美しい', color: '#9CC94B', ph: 'なぜ美しいと思った？', head: 'なぜ美しいと思ったか' },
     { k: 'curious', label: '気になる', color: '#F2B33D', ph: '何が気になった？', head: '気になったこと' },
     { k: 'more', label: 'もっと読みたい', color: '#EF6F7E', ph: 'どこをもっと読みたい？', head: 'もっと読みたいところ' },
-    { k: 'reread', label: 'あとで読み返す', color: '#6FC1E0', ph: 'いつ、なぜ読み返したい？', head: '読み返したい理由' }
+    { k: 'reread', label: 'あとで読み返す', color: '#6FC1E0', ph: 'いつ、なぜ読み返したい？', head: '読み返したい理由' },
+    { k: 'nope', label: '興味がない', color: '#A39A8E', ph: 'なぜ響かなかった？（それも自分の基準）', head: '興味がわかなかった理由' }
   ];
   var TAB = {}; TABS.forEach(function (t) { TAB[t.k] = t; });
   function pinOf(no) { var v = state.pins[no]; if (!v) return null; if (typeof v === 'object') return v; return { t: typeof v === 'number' ? v : 0, c: 'beauty' }; }
@@ -74,6 +75,16 @@
     $('todayDate').textContent = (now.getMonth() + 1) + '月' + now.getDate() + '日';
     $('todayNo').textContent = w[0];
     $('todayWord').textContent = w[1];
+    var ti = $('todayImg'), idx = W.indexOf(w); ti.alt = w[1];
+    if (ti.dataset.i !== String(idx)) {
+      ti.dataset.i = String(idx);
+      (function go(n) {
+        if (!window.KYBQuote) { if (n < 50) setTimeout(function () { go(n + 1); }, 100); return; }
+        window.KYBQuote.canvas(idx, { cover: false }).then(function (c) {
+          if (ti.dataset.i === String(idx)) ti.src = c.toDataURL('image/png');
+        });
+      })(0);
+    }
     var a = $('todayLink'); a.href = url(w, 'today'); a.textContent = w[2] + ' を読む'; a.onclick = function () { markRead(w[0]); };
     $('todayShare').onclick = function () { openShare([W.indexOf(w)]); };
     var tt = $('todayTabs'); tt.textContent = ''; tt.appendChild(tabRow(w[0]));

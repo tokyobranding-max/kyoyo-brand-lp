@@ -53,12 +53,13 @@
     g.fillStyle = '#1c1b19'; g.fillRect(x, y, w, h); g.restore();
     g.drawImage(coverImg, x, y, w, h);
   }
-  function draw(i) {
+  function draw(i, opts) {
+    opts = opts || {}; var withCover = opts.cover !== false;
     var q = Q[i], c = document.createElement('canvas'); c.width = W; c.height = H;
     var g = c.getContext('2d');
     g.fillStyle = '#F4F4F4'; g.fillRect(0, 0, W, H);
     quoteMark(g, PAD, 96, 74);
-    var top = 250, bottom = 760, size = 84, lines;
+    var top = 250, bottom = withCover ? 760 : 860, size = 84, lines;
     for (; size >= 44; size -= 2) {
       g.font = '700 ' + size + 'px "Noto Sans JP", "Hiragino Sans", sans-serif';
       lines = wrap(g, q[0], W - PAD * 2);
@@ -69,16 +70,16 @@
     g.font = '400 42px "Noto Sans JP", "Hiragino Sans", sans-serif';
     g.fillText(q[1] + '　' + q[2] + 'P', PAD, 940);
     g.fillText('教養としてのブランド', PAD, 1004);
-    drawCover(g, 760, 790, 252, 357);
+    if (withCover) drawCover(g, 760, 790, 252, 357);
     return c;
   }
   window.KYBQuote = {
     setCover: function (u) { coverUrl = u; coverImg = null; },
     count: Q.length,
     data: function (i) { return Q[i]; },
-    canvas: function (i) {
+    canvas: function (i, opts) {
       var f = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 60px "Noto Sans JP"'), document.fonts.load('400 40px "Noto Sans JP"')]).catch(function () {}) : Promise.resolve();
-      return f.then(loadCover).then(function () { return draw(i); });
+      return f.then(loadCover).then(function () { return draw(i, opts); });
     },
     blob: function (i) { return this.canvas(i).then(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); }); },
     filename: function (i) { return '教養としてのブランド_' + String(i + 1).padStart(2, '0') + '.png'; }
