@@ -166,7 +166,7 @@
   var setCur = function (id) { links.forEach(function (a) { if (!a.classList.contains('navlink')) return; var on = a.getAttribute('href') === '#' + id; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); };
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) setCur(en.target.id); }); }, { rootMargin: '-35% 0px -60% 0px' });
-    ['top', 'today', 'words', 'read', 'author'].forEach(function (id) { var n = $(id); if (n) io.observe(n); });
+    ['top', 'today', 'words', 'read', 'faq', 'author'].forEach(function (id) { var n = $(id); if (n) io.observe(n); });
   }
 
   // ---- 3D book (sample: opening pages)
