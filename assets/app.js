@@ -222,6 +222,14 @@
   $('nextWord').onclick = function () { state.shift++; var b = $('todayBox'); b.className = state.shift % 2 ? 'fadeB' : 'fadeA'; renderToday(); };
   render();
 
+  // ---- STEP 03: put your aesthetic into words (kept in this browser)
+  var aesth = load('kyb_aesth', {});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-aesth]'), function (ta) {
+    var k = ta.getAttribute('data-aesth');
+    ta.value = aesth[k] || '';
+    ta.addEventListener('input', function () { aesth[k] = ta.value; save('kyb_aesth', aesth); });
+  });
+
   // ---- sidebar: smooth scroll + current section
   var links = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
   links.forEach(function (a) {
@@ -236,7 +244,7 @@
   var setCur = function (id) { links.forEach(function (a) { if (!a.classList.contains('navlink')) return; var on = a.getAttribute('href') === '#' + id; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); };
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) setCur(en.target.id); }); }, { rootMargin: '-35% 0px -60% 0px' });
-    ['top', 'today', 'words', 'read', 'faq', 'author'].forEach(function (id) { var n = $(id); if (n) io.observe(n); });
+    ['top', 'step1', 'step2', 'step3', 'words', 'share', 'rich', 'read', 'faq', 'author'].forEach(function (id) { var n = $(id); if (n) io.observe(n); });
   }
 
   // ---- 3D book (sample: opening pages)
