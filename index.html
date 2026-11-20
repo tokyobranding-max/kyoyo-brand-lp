@@ -369,6 +369,11 @@ html{scroll-behavior:smooth}body{margin:0;background:#F4EFE7}
 [hidden]{display:none!important}
 .sum-h{margin:0 0 14px;font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;color:#F4EFE7;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid #3A352F;padding-bottom:10px}
 .sum-q{margin:0;padding:4px 0 4px 18px;border-left:3px solid var(--c,#E2C796);font-family:'Noto Serif JP',serif;font-size:18px;line-height:1.8;color:#F4EFE7;white-space:pre-wrap}
+.sum-step{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:13px;font-weight:700;color:#E2C796}
+.sum-step span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#E2C796;color:#161514;font-size:12px}
+.sum-ai{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid #8A7A63;background:transparent;color:#F4EFE7;font:inherit;font-size:14px;cursor:pointer;text-decoration:none}
+.sum-ai:hover{border-color:#E2C796;color:#E2C796}
+.sum-draft{border-style:dashed;color:#D8CFC2;font-size:16px}
 .sum-def{width:100%;min-height:96px;box-sizing:border-box;padding:14px 16px;border-radius:10px;border:1px solid #5E554A;background:#1E1C1A;color:#F4EFE7;font:inherit;font-family:'Noto Serif JP',serif;font-size:18px;line-height:1.8;resize:vertical}
 .sum-def:focus{outline:2px solid #E2C796;outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -648,7 +653,18 @@ a{color:#141414}a:hover{color:#6B4F2A}
 </div>
 <div>
 <h3 class="sum-h">わたしにとってブランドとは、</h3>
-<textarea data-aesth="def" class="sum-def" placeholder="ここまでの付箋と言葉を見返して、一文で書いてみてください" aria-label="わたしにとってブランドとは"></textarea>
+<p style="margin: 0 0 14px; font-size: 14px; line-height: 1.9; color: #E8E2D8;">まず、ここまでの付箋と言葉を、AIに言語化してもらいます。それはあくまで下書きです。最後は、ご自身の言葉で書いてみてください。</p>
+<div class="sum-step"><span>1</span>AIに言語化してもらう</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 8px;">
+<a class="sum-ai" id="aiClaude" href="https://claude.ai/new" target="_blank" rel="noopener">Claudeで言語化する</a>
+<a class="sum-ai" id="aiGpt" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPTで言語化する</a>
+<button type="button" class="sum-ai" id="aiCopy">依頼文をコピー</button>
+</div>
+<p id="aiHint" style="margin: 0 0 18px; font-size: 12px; line-height: 1.8; color: #A59D93;">付箋と言葉を入れた依頼文が、AIの画面に入った状態で開きます。返ってきた答えを、下に貼ってください。</p>
+<div class="sum-step"><span>2</span>AIの下書き</div>
+<textarea data-aesth="ai" class="sum-def sum-draft" placeholder="AIの答えを、ここに貼り付けます（下書き）" aria-label="AIの下書き"></textarea>
+<div class="sum-step" style="margin-top: 18px;"><span>3</span>ご自身の言葉で</div>
+<textarea data-aesth="def" class="sum-def" placeholder="下書きを参考に、ご自身の言葉で「わたしにとってブランドとは、」の続きを書いてみてください" aria-label="わたしにとってブランドとは（自分の言葉）"></textarea>
 </div>
 </div>
 <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">

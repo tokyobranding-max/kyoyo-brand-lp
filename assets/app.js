@@ -151,6 +151,7 @@
       f.appendChild(el('blockquote', { 'class': 'sum-q' }, v));
       sw.appendChild(f);
     });
+    updateAiLinks();
     if (!any) sw.appendChild(el('p', { style: 'margin: 0; font-size: 14px; color: #C9BFAF;' }, 'STEP 04の問いに答えると、ここに引用として並びます。'));
     $('sumCount').textContent = pinned.length ? pinned.length + '枚' : '';
     var list = $('pinList'); list.textContent = '';
@@ -179,6 +180,29 @@
       });
       list.appendChild(grp);
     });
+  }
+  function aiPrompt() {
+    var a = load('kyb_aesth', {}), out = [];
+    out.push('私は『教養としてのブランド』（チカイケ秀夫）を読みながら、気になった言葉に付箋を貼り、自分の日常から言葉を書きました。');
+    out.push('これらに共通している「私の美学」を読み取り、「わたしにとってブランドとは、」に続く一文を3案つくってください。');
+    out.push('条件：やさしい日本語で、1案60字以内。それぞれに、そう読み取った理由を1〜2文で添えてください。「興味がない」の付箋は、選ばないものとして手がかりにしてください。最後に「これは下書きです。ご自身の言葉で書き直してみてください」と書いてください。');
+    out.push('');
+    var ws = askList().filter(function (q) { return q.k !== 'ai' && q.k !== 'def' && (a[q.k] || '').trim(); });
+    if (ws.length) { out.push('■ 自分の日常の言葉'); ws.forEach(function (q) { out.push('・' + q.q); out.push('　→ ' + a[q.k].trim().replace(/\n/g, ' ')); }); out.push(''); }
+    var pinned = W.filter(function (w) { return state.pins[w[0]]; });
+    TABS.forEach(function (tb) {
+      var g = pinned.filter(function (w) { return pinOf(w[0]).c === tb.k; }); if (!g.length) return;
+      out.push('■ 付箋「' + tb.label + '」');
+      g.forEach(function (w) { out.push('・「' + w[1] + '」（' + w[2] + '）'); var nt = (state.notes[w[0]] || '').trim(); if (nt) out.push('　' + tb.head + '：' + nt.replace(/\n/g, ' ')); });
+      out.push('');
+    });
+    if (!ws.length && !pinned.length) out.push('（まだ付箋も言葉もありません。本の考え方から、問いかけの形で一緒に考えてください）');
+    return out.join('\n');
+  }
+  function updateAiLinks() {
+    var t = aiPrompt();
+    $('aiClaude').href = 'https://claude.ai/new?q=' + encodeURIComponent(t);
+    $('aiGpt').href = 'https://chatgpt.com/?q=' + encodeURIComponent(t);
   }
   function summaryText() {
     var a = load('kyb_aesth', {}), out = ['『教養としてのブランド』わたしのまとめ', ''];
@@ -288,6 +312,12 @@
 
   var sumT = null; function sumLater() { clearTimeout(sumT); sumT = setTimeout(function () { renderSummary(); }, 400); }
   document.addEventListener('input', function (e) { if (e.target && e.target.closest && e.target.closest('.pins')) sumLater(); });
+  $('aiCopy').onclick = function () {
+    var t = aiPrompt(), b = $('aiCopy');
+    var done = function () { b.textContent = 'コピーしました'; $('aiHint').textContent = 'お使いのAI（Claude、ChatGPT、Geminiなど）に貼り付けて送り、返ってきた答えを下に貼ってください。'; setTimeout(function () { b.textContent = '依頼文をコピー'; }, 1800); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { window.prompt('コピーしてください', t); }); else window.prompt('コピーしてください', t);
+  };
+  $('aiClaude').addEventListener('click', updateAiLinks); $('aiGpt').addEventListener('click', updateAiLinks);
   $('copySum').onclick = function () {
     var t = summaryText(), b = $('copySum'), done = function () { b.textContent = 'コピーしました'; setTimeout(function () { b.textContent = 'まとめをテキストでコピー'; }, 1800); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { window.prompt('コピーしてください', t); }); else window.prompt('コピーしてください', t);
@@ -297,7 +327,7 @@
   Array.prototype.forEach.call(document.querySelectorAll('[data-aesth]'), function (ta) {
     var k = ta.getAttribute('data-aesth');
     ta.value = aesth[k] || '';
-    ta.addEventListener('input', function () { aesth[k] = ta.value; save('kyb_aesth', aesth); if (k !== 'def') sumLater(); });
+    ta.addEventListener('input', function () { aesth[k] = ta.value; save('kyb_aesth', aesth); if (k !== 'def' && k !== 'ai') sumLater(); });
   });
 
   // ---- sidebar: smooth scroll + current section
