@@ -157,23 +157,23 @@
     var list = $('pinList'); list.textContent = '';
     TABS.forEach(function (tb) {
       var g = pinned.filter(function (w) { return pinOf(w[0]).c === tb.k; }); if (!g.length) return;
-      var grp = el('div', { style: 'display: flex; flex-direction: column; gap: 14px;' });
-      grp.appendChild(el('p', { style: 'margin: 0; font-size: 13px; font-weight: 700; color: ' + tb.color + ';' }, '■ ' + tb.label + '（' + g.length + '）'));
+      var grp = el('div', { style: 'display: flex; flex-direction: column; gap: 10px;' });
+      grp.appendChild(el('p', { style: 'margin: 0; font-size: 12px; font-weight: 700; color: ' + tb.color + ';' }, '■ ' + tb.label + '（' + g.length + '）'));
       g.forEach(function (w) {
-        var f = el('figure', { style: 'margin: 0; padding: 16px 18px; background: #1E1C1A; border: 1px solid #3A352F; border-left: 6px solid ' + tb.color + '; border-radius: 10px;' });
-        f.appendChild(el('blockquote', { 'class': 'sum-q', style: '--c:' + tb.color + '; font-size: 17px;' }, '「' + w[1] + '」'));
-        var cap = el('figcaption', { style: 'margin: 10px 0 0; font-size: 13px; color: #C9BFAF; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center;' });
+        var f = el('figure', { style: 'margin: 0; padding: 12px 14px; background: #FBF8F3; border: 1px solid #E3DACD; border-left: 5px solid ' + tb.color + '; border-radius: 8px;' });
+        f.appendChild(el('blockquote', { style: 'margin: 0; font-family: \'Noto Serif JP\', serif; font-size: 15px; line-height: 1.8; color: #141414;' }, '「' + w[1] + '」'));
+        var cap = el('figcaption', { style: 'margin: 8px 0 0; font-size: 12px; color: #5A5148; display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: center;' });
         cap.appendChild(document.createTextNode('No.' + w[0]));
-        var lk = el('a', { href: url(w, 'summary'), target: '_blank', rel: 'noopener', style: 'color: #E2C796;' }, w[2] + ' を読む');
+        var lk = el('a', { href: url(w, 'summary'), target: '_blank', rel: 'noopener', style: 'color: #6B4F2A;' }, w[2] + ' を読む');
         lk.onclick = function () { markRead(w[0]); };
         cap.appendChild(lk);
-        if (state.read[w[0]]) cap.appendChild(el('span', { style: 'font-size: 11px; color: #9CC94B;' }, '読んだ'));
+        if (state.read[w[0]]) cap.appendChild(el('span', { style: 'font-size: 11px; color: #5E8A1E;' }, '読んだ'));
         f.appendChild(cap);
         var nt = (state.notes[w[0]] || '').trim();
         if (nt) {
-          var me = el('div', { style: 'margin: 12px 0 0; padding: 10px 12px; background: #262320; border-radius: 8px;' });
-          me.appendChild(el('p', { style: 'margin: 0 0 4px; font-size: 11px; font-weight: 700; color: ' + tb.color + ';' }, tb.head));
-          me.appendChild(el('p', { style: 'margin: 0; font-size: 15px; line-height: 1.8; color: #F4EFE7; white-space: pre-wrap;' }, nt));
+          var me = el('div', { style: 'margin: 10px 0 0; padding: 8px 10px; background: #FFFFFF; border-radius: 6px;' });
+          me.appendChild(el('p', { style: 'margin: 0 0 2px; font-size: 11px; font-weight: 700; color: #6B4F2A;' }, tb.head));
+          me.appendChild(el('p', { style: 'margin: 0; font-size: 14px; line-height: 1.7; color: #141414; white-space: pre-wrap;' }, nt));
           f.appendChild(me);
         }
         grp.appendChild(f);

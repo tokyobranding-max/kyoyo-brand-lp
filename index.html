@@ -458,8 +458,11 @@ a{color:#141414}a:hover{color:#6B4F2A}
 .country:hover{border-color:#8A6A3A;transform:translateY(-2px)}
 .country span{font-size:12px;letter-spacing:.12em;color:#8A7A63}
 .country b{font-family:'Noto Serif JP',serif;font-size:16px;font-weight:600}
-.asks{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.asks{width:100%;display:grid;align-items:start;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .ask{background:#FFFFFF;border:1px solid #D8CFC2;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:10px;text-align:left}
+.ask-pins{margin-top:6px;padding-top:14px;border-top:1px dashed #D8CFC2;display:flex;flex-direction:column;gap:10px}
+.ask-pins-h{margin:0;font-size:13px;font-weight:700;color:#3A332B}
+.ask-pins-h span{font-weight:400;color:#8A7A63;margin-left:4px}
 .ask small{font-size:12px;letter-spacing:.14em;color:#8A6A3A}
 .ask b{font-family:'Noto Serif JP',serif;font-size:19px;font-weight:600;line-height:1.6}
 .ask textarea{width:100%;box-sizing:border-box;min-height:90px;resize:vertical;border:1px solid #D8CFC2;border-radius:8px;padding:10px 12px;font:inherit;font-size:15px;line-height:1.7;background:#FBF8F3;color:#141414}
@@ -630,7 +633,7 @@ a{color:#141414}a:hover{color:#6B4F2A}
 <p class="step-k">STEP 04<span>美学を言語化する</span></p>
 <h2 class="reveal" style="margin: 0; font-family: 'Noto Serif JP', serif; font-weight: 600; font-size: 34px; line-height: 1.45;">あなたは、何を美しいと感じますか。</h2>
 <p class="reveal" style="margin: 0; font-size: 17px; line-height: 1.9; max-width: 760px;">気になった章の記事を読んだら、今度は自分の番です。美学は、難しい言葉ではありません。自分がどんなことに美しいと感じるかを、短い言葉にしてみるだけです。三つの問いに、思いついたことを書いてみてください。</p>
-<div class="asks"><div class="ask reveal"><small>問い 1　長く使っているもの</small><b>何年も手放さずに使っているものは何ですか。どこが好きですか。</b><textarea data-aesth="a1" placeholder="思いついたことを、短い言葉で" aria-label="長く使っているもの"></textarea></div><div class="ask reveal"><small>問い 2　思わず見とれたもの</small><b>最近、思わず見とれた景色や、人のふるまいはありますか。</b><textarea data-aesth="a2" placeholder="思いついたことを、短い言葉で" aria-label="思わず見とれたもの"></textarea></div><div class="ask reveal"><small>問い 3　安くても選ばなかったもの</small><b>安くても選ばなかったものはありますか。なぜ選ばなかったのでしょう。</b><textarea data-aesth="a3" placeholder="思いついたことを、短い言葉で" aria-label="安くても選ばなかったもの"></textarea></div></div>
+<div class="asks"><div class="ask reveal"><small>問い 1　長く使っているもの</small><b>何年も手放さずに使っているものは何ですか。どこが好きですか。</b><textarea data-aesth="a1" placeholder="思いついたことを、短い言葉で" aria-label="長く使っているもの"></textarea><div class="ask-pins"><p class="ask-pins-h">付箋を貼った記事 <span id="sumCount"></span></p><div id="pinList" style="display: flex; flex-direction: column; gap: 14px;"></div><p id="noPins" style="margin: 0; font-size: 13px; color: #8A7A63;">STEP 03の言葉のカードに付箋を貼ると、ここに集まります。</p></div></div><div class="ask reveal"><small>問い 2　思わず見とれたもの</small><b>最近、思わず見とれた景色や、人のふるまいはありますか。</b><textarea data-aesth="a2" placeholder="思いついたことを、短い言葉で" aria-label="思わず見とれたもの"></textarea></div><div class="ask reveal"><small>問い 3　安くても選ばなかったもの</small><b>安くても選ばなかったものはありますか。なぜ選ばなかったのでしょう。</b><textarea data-aesth="a3" placeholder="思いついたことを、短い言葉で" aria-label="安くても選ばなかったもの"></textarea></div></div>
 <p class="reveal" style="margin: 0; font-family: 'Noto Serif JP', serif; font-size: 18px; line-height: 1.9; color: #6B4F2A;">書いた言葉に共通するものが、あなたの美学の入り口です。</p>
 <p style="margin: 0; font-size: 12px; color: #8A7A63;">書いた内容は、このブラウザの中だけに保存されます。</p>
 </div>
@@ -640,16 +643,11 @@ a{color:#141414}a:hover{color:#6B4F2A}
 <div style="max-width: 1120px; margin: 0 auto; padding: 80px 24px; display: flex; flex-direction: column; gap: 22px; align-items: center; text-align: center;">
 <p class="step-k dk">STEP 05<span>意識して生活する</span></p>
 <h2 class="reveal" style="margin: 0; font-weight: 900; font-size: 40px; line-height: 1.45;">あなたにとって<span style="color: #E2C796;">ブランド</span>とは？</h2>
-<p class="reveal" style="margin: 0; font-size: 16px; line-height: 1.9; max-width: 720px; color: #E8E2D8;">気になった記事に貼った付箋と、あなたが自分の日常から言葉にしたことを、ここにまとめました。読み返すたびに、自分の美学に立ち戻れる場所です。</p>
+<p class="reveal" style="margin: 0; font-size: 16px; line-height: 1.9; max-width: 720px; color: #E8E2D8;">あなたが自分の日常から言葉にしたことを、ここにまとめました。読み返すたびに、自分の美学に立ち戻れる場所です。</p>
 <div id="sumBox" style="display: flex; flex-direction: column; gap: 36px; width: 100%; max-width: 760px; text-align: left;">
 <div>
 <h3 class="sum-h">わたしの日常の言葉 <a href="#step3" data-nav style="font-size: 12px; font-weight: 400; color: #C9BFAF;">STEP 04で書く →</a></h3>
 <div id="sumWords" style="display: flex; flex-direction: column; gap: 14px;"></div>
-</div>
-<div>
-<h3 class="sum-h">付箋を貼った記事 <span id="sumCount" style="font-size: 12px; font-weight: 400; color: #C9BFAF;"></span></h3>
-<div id="pinList" style="display: flex; flex-direction: column; gap: 22px;"></div>
-<p id="noPins" style="margin: 0; font-size: 14px; color: #C9BFAF;">STEP 03の言葉のカードに付箋を貼ると、ここに集まります。</p>
 </div>
 <div>
 <h3 class="sum-h">わたしにとってブランドとは、</h3>
