@@ -325,7 +325,7 @@ function makeBook3D(T, cv, o) {
     renderer.render(scene, cam);
     if (o.onHint) {
       const showH = mode === 'closed' && !drag; let key = 'off', pos = null;
-      if (showH) { const p = edgePts(); pos = { x: p.ex, y: p.ey, bot: p.bot, hover: hover }; key = Math.round(p.ex) + ',' + Math.round(p.ey) + (hover ? 'h' : ''); }
+      if (showH) { const p = edgePts(); pos = { x: p.ex, y: p.ey, sx: p.sx, bot: p.bot, hover: hover }; key = Math.round(p.ex) + ',' + Math.round(p.ey) + (hover ? 'h' : ''); }
       if (key !== hintKey) { hintKey = key; o.onHint(pos); }
     }
     raf = requestAnimationFrame(loop);

@@ -373,7 +373,7 @@
         onState: onState,
         onHint: function (p) {
           var h = $('bookHint'); if (!p) { h.hidden = true; return; }
-          h.hidden = false; var below = cv.clientWidth < 560; h.classList.toggle('below', below); h.style.left = (below ? Math.max(4, p.x - 10) : p.x) + 'px'; h.style.top = (below ? p.bot + 14 : p.y) + 'px'; h.querySelector('.bh-arrow').textContent = below ? '↑' : '→'; h.classList.toggle('on', !!p.hover);
+          h.hidden = false; h.classList.toggle('on', !!p.hover); var d = (p.sx > p.x ? 1 : -1) * Math.min(22, Math.abs(p.sx - p.x) * 0.12); h.style.left = (p.x + d) + 'px'; h.style.top = p.y + 'px';
         }
       });
       $('bookFallback').hidden = true;
