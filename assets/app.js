@@ -354,7 +354,7 @@
   setSoundLabel();
   function onState(st) {
     $('bookClosedCtl').hidden = st.open; $('bookOpenCtl').hidden = !st.open;
-    cv.setAttribute('aria-label', st.open ? '開いた本。ページの左側をクリックで次のページ、右側で前のページ' : '『教養としてのブランド』の立体の本。ドラッグで回せます。クリックで本を開きます');
+    cv.setAttribute('aria-label', st.open ? '開いた本。ページの左側をクリックで次のページ、右側で前のページ' : '『教養としてのブランド』の立体の本。ドラッグで回せます。表紙の左側をクリックすると本が開きます');
     var sp = st.spread || 0;
     $('bookLabel').textContent = sp === 0 ? '試し読み p.1' : (2 * sp + 1 > SAMPLE ? '試し読みはここまで' : '試し読み p.' + (2 * sp) + '–' + Math.min(SAMPLE, 2 * sp + 1));
   }
@@ -370,7 +370,11 @@
           { text: '期間限定・無料で公開中です。', y: 462, size: 24, color: '#4A433B' },
           { text: '教養としてのブランド', y: 600, size: 22, color: '#8A7A63' }
         ],
-        onState: onState
+        onState: onState,
+        onHint: function (p) {
+          var h = $('bookHint'); if (!p) { h.hidden = true; return; }
+          h.hidden = false; var below = cv.clientWidth < 560; h.classList.toggle('below', below); h.style.left = (below ? Math.max(4, p.x - 10) : p.x) + 'px'; h.style.top = (below ? p.bot + 14 : p.y) + 'px'; h.querySelector('.bh-arrow').textContent = below ? '↑' : '→'; h.classList.toggle('on', !!p.hover);
+        }
       });
       $('bookFallback').hidden = true;
       return true;

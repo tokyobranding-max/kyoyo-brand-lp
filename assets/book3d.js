@@ -186,8 +186,8 @@ function makeBook3D(T, cv, o) {
   const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
   const open = () => {
     if (mode !== 'closed') return;
-    mode = 'opening'; ry = Math.atan2(Math.sin(ry), Math.cos(ry)); vx = vy = 0; tilt = { x: 0, y: 0 };
-    coverAnim = { from: 0, to: Math.PI, t0: performance.now() + 250, dur: reduce ? 300 : 1300 };
+    mode = 'opening'; hover = false; ry = Math.atan2(Math.sin(ry), Math.cos(ry)); vx = vy = 0; tilt = { x: 0, y: 0 };
+    coverAnim = { from: ca, to: Math.PI, t0: performance.now() + 250, dur: reduce ? 300 : 1300 };
     sfx('cover'); emit();
   };
   const close = () => {
@@ -221,7 +221,17 @@ function makeBook3D(T, cv, o) {
   const zone = (p) => { if (!p || Math.abs(p.y) > H / 2 + 0.15) return 0; if (p.x < -W * 0.58 && p.x > -W - 0.25 && s < maxS) return 1; if (p.x > W * 0.58 && p.x < W + 0.25 && s > 0) return -1; return 0; };
   const angleAt = (p) => Math.acos(Math.max(-1, Math.min(1, -p.x / W)));
   // ---- input
-  let drag = null;
+  let drag = null, hover = false, hintKey = '';
+  const edgePts = () => {
+    const r = cv.getBoundingClientRect(), pj = (x, y) => { const v = cover.localToWorld(new T.Vector3(x, y, 0)).project(cam); return { x: (v.x + 1) / 2 * r.width, y: (1 - v.y) / 2 * r.height }; };
+    const e = pj(-W, 0), sp = pj(0, 0), t = pj(-W, H / 2), b = pj(-W, -H / 2);
+    return { ex: e.x, ey: e.y, sx: sp.x, top: Math.min(t.y, b.y), bot: Math.max(t.y, b.y), r };
+  };
+  const inLeft = (e) => {
+    const p = edgePts(), x = e.clientX - p.r.left, y = e.clientY - p.r.top, w = p.sx - p.ex;
+    if (y < p.top - 10 || y > p.bot + 10) return false;
+    return w > 0 ? (x > p.ex - 24 && x < p.ex + w * 0.45) : (x < p.ex + 24 && x > p.ex + w * 0.45);
+  };
   const down = (e) => {
     drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, t: performance.now(), page: false }; vx = vy = 0; lastAct = performance.now();
     try { cv.setPointerCapture(e.pointerId); } catch (er) {}
@@ -232,7 +242,7 @@ function makeBook3D(T, cv, o) {
     }
   };
   const move = (e) => {
-    if (!drag) { if (mode === 'open' && !lf) cv.style.cursor = zone(localPt(e)) ? 'grab' : 'pointer'; return; }
+    if (!drag) { if (mode === 'closed') { hover = inLeft(e); cv.style.cursor = hover ? 'pointer' : 'grab'; } else if (mode === 'open' && !lf) cv.style.cursor = zone(localPt(e)) ? 'grab' : 'pointer'; return; }
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; lastAct = performance.now();
     if (mode === 'closed') { vy = dx * 0.012; vx = dy * 0.008; ry += vy; rx += vx; }
     else if (drag.page && lf) { const p = localPt(e); if (p) { const raw = angleAt(p); const k = lf.dir > 0 ? raw / Math.PI : 1 - raw / Math.PI; lf.target = Math.max(0, Math.min(Math.PI, raw - lf.off * (1 - k))); } }
@@ -257,6 +267,7 @@ function makeBook3D(T, cv, o) {
       else if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 600) { flip(dx > 0 ? 1 : -1); tilt.y = 0; }
     }
   };
+  cv.addEventListener('pointerleave', () => { hover = false; if (mode === 'closed') cv.style.cursor = 'grab'; });
   cv.addEventListener('pointerdown', down); cv.addEventListener('pointermove', move); cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
   const size = () => { const w = cv.clientWidth || 600, h = cv.clientHeight || 450; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); };
   size();
@@ -285,8 +296,13 @@ function makeBook3D(T, cv, o) {
       }
       if (lf) { leaf.rotation.y = lf.a; leaf.position.z = 0.002; deformLeaf(lf.a, lf.v, lf.gy, lf.grab); castShadow(lf.a); }
     }
+    if (mode === 'closed' && !coverAnim) {
+      const idle = !drag && !hover && now - lastAct > 1200 && !reduce;
+      const tgt = drag ? 0 : hover ? 0.38 : idle ? Math.pow(Math.max(0, Math.sin(t * 1.4)), 8) * 0.16 : 0;
+      ca += (tgt - ca) * 0.14;
+    }
     layout();
-    const op = ca / Math.PI; // 0 closed .. 1 open
+    const op = mode === 'closed' ? 0 : ca / Math.PI; // 0 closed .. 1 open
     if (mode === 'closed') {
       if (!drag) {
         ry += vy; rx += vx; vy *= 0.94; vx *= 0.9;
@@ -307,6 +323,11 @@ function makeBook3D(T, cv, o) {
     const dO = Math.max((H * 1.16) / (2 * f), (2 * W * 1.08) / (2 * f * cam.aspect));
     cam.position.set(0, 0.05, dC + (dO - dC) * op); cam.lookAt(0, 0, 0);
     renderer.render(scene, cam);
+    if (o.onHint) {
+      const showH = mode === 'closed' && !drag; let key = 'off', pos = null;
+      if (showH) { const p = edgePts(); pos = { x: p.ex, y: p.ey, bot: p.bot, hover: hover }; key = Math.round(p.ex) + ',' + Math.round(p.ey) + (hover ? 'h' : ''); }
+      if (key !== hintKey) { hintKey = key; o.onHint(pos); }
+    }
     raf = requestAnimationFrame(loop);
   };
   layout(); leftPage.material.map = tex(1); raf = requestAnimationFrame(loop);
