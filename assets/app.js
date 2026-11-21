@@ -373,7 +373,7 @@
         onState: onState,
         onHint: function (p) {
           var h = $('bookHint'); if (!p) { h.hidden = true; return; }
-          h.hidden = false; h.classList.toggle('on', !!p.hover); var d = (p.sx > p.x ? 1 : -1) * Math.min(22, Math.abs(p.sx - p.x) * 0.12); h.style.left = (p.x + d) + 'px'; h.style.top = p.y + 'px';
+          h.hidden = false; h.classList.toggle('on', !!p.hover); var d = (p.sx > p.x ? -1 : 1) * 8; h.style.left = (p.x + d) + 'px'; h.style.top = p.y + 'px';
         }
       });
       $('bookFallback').hidden = true;
