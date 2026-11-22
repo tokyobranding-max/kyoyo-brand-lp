@@ -236,6 +236,7 @@
     if (!window.KYBQuote || !idxs.length) return;
     shareIdx = idxs; shareBlobs = []; $('shareImgs').textContent = ''; $('shareMsg').textContent = '画像をつくっています…'; $('shareModal').hidden = false;
     $('shareX').href = 'https://x.com/intent/post?text=' + encodeURIComponent(shareText(idxs));
+    $('shareFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(qUrl(idxs[0]));
     $('shareHint').textContent = '';
     Promise.all(idxs.map(function (i) { return KYBQuote.canvas(i); })).then(function (cs) {
       shareCv = cs;
@@ -243,8 +244,8 @@
       return Promise.all(cs.map(function (c) { return new Promise(function (r) { c.toBlob(r, 'image/png'); }); }));
     }).then(function (bs) {
       shareBlobs = bs; $('shareMsg').textContent = '';
-      $('shareHint').textContent = canFileShare() ? '「Xでシェア」を押して、表示された一覧からXを選ぶと、画像が添付された投稿画面が開きます'
-        : '「Xでシェア」を押すと画像がコピーされ、Xの投稿画面が開きます。本文の下で ' + (isMac ? '⌘ + V' : 'Ctrl + V') + ' を押すと画像が添付されます' + (idxs.length > 1 ? '（2枚目以降は「画像を保存」から添付してください）' : '');
+      $('shareHint').textContent = canFileShare() ? '「Xでシェア」「Facebookでシェア」を押して、表示された一覧からアプリを選ぶと、画像が添付された投稿画面が開きます'
+        : '「Xでシェア」を押すと画像がコピーされ、Xの投稿画面が開きます。本文の下で ' + (isMac ? '⌘ + V' : 'Ctrl + V') + ' を押すと画像が添付されます' + (idxs.length > 1 ? '（2枚目以降は「画像を保存」から添付してください）' : '') + '。「Facebookでシェア」を押すと本文がコピーされ、引用カードつきの投稿画面が開きます。本文は投稿欄に貼り付けてください';
     });
   }
   $('shareX').addEventListener('click', function (e) {
@@ -261,6 +262,18 @@
         }, function () { $('shareMsg').textContent = '画像をコピーできませんでした。「画像を保存」から添付してください'; });
       } else { $('shareMsg').textContent = 'このブラウザでは画像をコピーできません。「画像を保存」から添付してください'; }
     } catch (er) { $('shareMsg').textContent = '「画像を保存」から添付してください'; }
+  });
+  $('shareFb').addEventListener('click', function (e) {
+    if (!shareIdx.length) { e.preventDefault(); return; }
+    if (canFileShare()) {
+      e.preventDefault();
+      navigator.share({ files: files(), text: shareText(shareIdx) }).catch(function (er) { if (!er || er.name !== 'AbortError') $('shareMsg').textContent = 'シェアできませんでした。画像を保存してから添付してください'; });
+      return;
+    }
+    var t = shareText(shareIdx);
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { $('shareMsg').textContent = '本文をコピーしました。Facebookの投稿欄で ' + (isMac ? '⌘ + V' : 'Ctrl + V') + ' を押して貼り付けてください'; }, function () {});
+    } catch (er) {}
   });
   $('shareClose').onclick = function () { $('shareModal').hidden = true; };
   $('shareModal').addEventListener('click', function (e) { if (e.target === $('shareModal')) $('shareModal').hidden = true; });
