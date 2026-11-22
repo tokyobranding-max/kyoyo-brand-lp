@@ -226,8 +226,9 @@
   var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
   function qUrl(i) { return LP + 'q/' + String(i + 1).padStart(2, '0') + '/'; }
   function shareText(idxs) {
-    if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P\n#教養としてのブランド\n' + qUrl(idxs[0]); }
-    return '『教養としてのブランド』から、気になった言葉\n#教養としてのブランド\n' + qUrl(idxs[0]);
+    var note = function (i) { return W[i] ? '\n▼noteで読む\n' + url(W[i], 'share') : ''; };
+    if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P' + note(idxs[0]) + '\n#教養としてのブランド\n' + qUrl(idxs[0]); }
+    return '『教養としてのブランド』から、気になった言葉' + note(idxs[0]) + '\n#教養としてのブランド\n' + qUrl(idxs[0]);
   }
   function files() { return shareBlobs.map(function (b, k) { return new File([b], KYBQuote.filename(shareIdx[k]), { type: 'image/png' }); }); }
   function canFileShare() { try { return touch && !!navigator.share && !!navigator.canShare && navigator.canShare({ files: files() }); } catch (e) { return false; } }
