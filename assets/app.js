@@ -74,8 +74,8 @@
     var w = W[(day + state.shift) % W.length];
     $('todayDate').textContent = (now.getMonth() + 1) + '月' + now.getDate() + '日';
     $('todayNo').textContent = w[0];
-    $('todayWord').textContent = w[1];
-    var ti = $('todayImg'), idx = W.indexOf(w); ti.alt = w[1];
+    $('todayWord').textContent = window.KYBQuote ? KYBQuote.data(W.indexOf(w))[0] : w[1];
+    var ti = $('todayImg'), idx = W.indexOf(w); ti.alt = window.KYBQuote ? KYBQuote.data(idx)[0] : w[1];
     if (ti.dataset.i !== String(idx)) {
       ti.dataset.i = String(idx);
       (function go(n) {
@@ -98,6 +98,22 @@
       box.appendChild(b);
     });
   }
+  var qCache = {}, qIO = null, qBusy = Promise.resolve();
+  function qMake(img) {
+    var i = Number(img.getAttribute('data-i'));
+    if (qCache[i]) { img.src = qCache[i]; return; }
+    qBusy = qBusy.then(function () {
+      if (!window.KYBQuote) return;
+      return KYBQuote.canvas(i, { cover: false }).then(function (c) {
+        return new Promise(function (r) { c.toBlob(function (b) { qCache[i] = URL.createObjectURL(b); r(); }, 'image/jpeg', 0.88); });
+      }).then(function () { document.querySelectorAll('img.card-q[data-i="' + i + '"]').forEach(function (m) { m.src = qCache[i]; }); });
+    }).catch(function () {});
+  }
+  function qObs(img) {
+    if (!('IntersectionObserver' in window)) { qMake(img); return; }
+    if (!qIO) qIO = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { qIO.unobserve(e.target); qMake(e.target); } }); }, { rootMargin: '600px 0px' });
+    qIO.observe(img);
+  }
   function renderCards() {
     var box = $('cards'); box.textContent = '';
     W.forEach(function (w, i) {
@@ -113,7 +129,9 @@
       row.appendChild(el('span', { style: 'font-size: 13px; letter-spacing: 0.1em; color: #5A5148;' }, 'No.' + w[0] + (state.read[w[0]] ? '　読んだ' : '')));
       if (pinned) row.appendChild(el('span', { style: 'font-size: 12px; font-weight: 700; color: #3A332B;' }, '付箋：' + TAB[pin.c].label));
       card.appendChild(row);
-      card.appendChild(el('p', { style: "margin: 0; font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 600; line-height: 1.65; flex-grow: 1;" }, w[1]));
+      var qi = el('img', { 'class': 'card-q', src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==', alt: window.KYBQuote ? KYBQuote.data(i)[0] : w[1], width: '1080', height: '1170', 'data-i': String(i), style: 'display: block; width: 100%; height: auto; aspect-ratio: 1080 / 1170; border-radius: 8px; background: #F4F4F4; border: 1px solid #E3DACD; box-sizing: border-box;' });
+      if (qCache[i]) qi.src = qCache[i]; else qObs(qi);
+      card.appendChild(qi);
       var a = el('a', { href: url(w, 'words'), target: '_blank', rel: 'noopener', style: 'font-size: 13px; padding: 8px 0;' }, w[2]);
       a.onclick = function () { markRead(w[0]); };
       card.appendChild(a);
@@ -224,7 +242,7 @@
   if (window.KYBQuote) KYBQuote.setCover('assets/front.jpg');
   var touch = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
   var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
-  function qUrl(i) { return LP + 'q/' + String(i + 1).padStart(2, '0') + '/'; }
+  function qUrl(i) { var k = window.KYBQuote ? KYBQuote.variant(i) : 0; return LP + 'q/' + String(i + 1).padStart(2, '0') + (k ? '-' + (k + 1) : '') + '/'; }
   function shareText(idxs) {
     var note = function (i) { return W[i] ? '\n▼noteで読む\n' + url(W[i], 'share') : ''; };
     if (idxs.length === 1) { var q = KYBQuote.data(idxs[0]); return '「' + q[0] + '」\n『教養としてのブランド』' + q[1] + '　' + q[2] + 'P' + note(idxs[0]) + '\n#教養としてのブランド\n' + qUrl(idxs[0]); }
